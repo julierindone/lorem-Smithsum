@@ -69,13 +69,13 @@ main {
 	margin-top: .5rem;
 }
 
-.word-count-container {
+.word-count-input-container {
 	display: flex;
 	align-items: center;
 	column-gap: 3%;
 }
 
-.word-count-container > * > * {
+.word-count-input-container > * > * {
 	padding: 0.25rem 0;
 	font-size: 1.1rem;
 }
@@ -85,8 +85,8 @@ label {
 	opacity: .8;
 }
 
-#word-count {
-  color: #285f71b0;
+#word-count-input {
+  color: #448094;
 	text-align: center;
 	width: 4rem;
 	opacity: .60;
@@ -107,7 +107,7 @@ button {
 	box-shadow: 2px 3px #3a535b;
 	padding: 0.5rem .6rem !important;
 }
-.copy-button {
+.copy-btn {
 	margin-top: .8rem;
 	width: 8rem;
 	float: right;
@@ -141,21 +141,21 @@ button:active {
 	display: inline;
 }
 
-.results-wrapper {
+.lyrics-box {
 	opacity: .75;
-	min-height: 5rem;
+	min-height: 7rem;
 	margin-top: 1.0rem;
 	padding: 1.25% 1.75%;
 }
 
-.results-wrapper p {
+.lyrics-box p {
 	color: var(--dark-ice-blue);
 	font-size: 1.1rem;
 	line-height: 1.5;
 	margin: 0;
 }
 
-.empty-results-wrapper {
+.empty-lyrics-box {
 	display: none;
 	opacity:.15;
 }
@@ -194,12 +194,12 @@ span.line {
 		margin-left: .75rem;
 		margin-right: .75rem;
 	}
-	.word-count-container {
+	.word-count-input-container {
 		align-items: unset;
 		flex-direction: column;
 		width: max-content;
 	}
-	.word-count-container > * > * {
+	.word-count-input-container > * > * {
 		font-size: 1.05rem;
 	}
 	button {
@@ -210,7 +210,7 @@ span.line {
 	#error-message {
 		padding-left: .2rem;
 	}
-	.results-wrapper p {
+	.lyrics-box p {
 		font-size: 1.1rem;
 		line-height: 1.6;
 	}

@@ -12,20 +12,21 @@ const copyBtnEl = document.getElementById('copy-btn')
 let numWordsToGet = ''
 let songToGet = ''
 
+wordCountInputEl.addEventListener('focus', () => {
+	if (wordCountInputEl.value) {
+		clearInput()
+	}
+})
+
 generateSmithsumBtnEl.addEventListener('click', () => {
 	numWordsToGet = Number(wordCountInputEl.value.trim())
 	// console.log(`numWordsToGet: ${numWordsToGet} \ntype is ${typeof numWordsToGet}`);
 
 	if (/\D/.test(numWordsToGet) || numWordsToGet > 300 || numWordsToGet === 0) {
 		errorMessageEl.innerHTML = "<p>Please enter a number between 1 and 300.</p>"
-		wordCountInputEl.addEventListener('focus', clearerrorMessageEl)
 	}
 	else {
 		generateLoremSmithsum()
-
-		wordCountInputEl.addEventListener('focus', () => {
-			wordCountInputEl.value = ''
-		})
 	}
 })
 
@@ -90,10 +91,11 @@ function getCorrectwordCountInputEl() {
 	return numWordsToGet
 }
 
-function clearerrorMessageEl() {
+function clearInput() {
+	console.log(`inside clearInput()`);
 	errorMessageEl.innerHTML = ''
 	wordCountInputEl.value = ''
-	lyricsBoxEl.textContent = ''
+	// lyricsBoxEl.textContent = ''
 }
 
 function displayLyrics(songToGet) {

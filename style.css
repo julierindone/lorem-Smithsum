@@ -2,11 +2,11 @@
 
 :root {
 	/* --white: whiteSmoke; */
-	--white: #f5f5f5;
+	--white: #fbfbfb;
 	--dark-gray: #2f2f2f;
 	--ice-blue: #78a2b0;
 	--trans-ice-blue: #78a2b0a1;
-	--dark-ice-blue: #5390a4;
+	--dark-ice-blue: #448094; 
 }
 
 .bodoni-moda-sc {
@@ -20,15 +20,15 @@ body, html {
 	background-color: var(--dark-gray);
 	color: var(--white);
 	margin: 0;
-	height: 100%
+	height: 100%;
 }	
 
 #wrapper {
 	margin: 0 auto;
 	display: flex;
 	flex-direction: column;
-	min-height: 100vh;
-	max-width:1300px
+	height: 100vh;
+	max-width:1300px;
 }
 
 .rocker-boys {
@@ -47,9 +47,9 @@ body, html {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	justify-items: center;
+	justify-content: center;
 	margin-top: 5%;
-	margin-bottom: 0.5%;
+	margin-bottom: 1%;
 	padding: 2%;
 }	
 
@@ -59,58 +59,91 @@ h1 {
 	-webkit-text-stroke-width: .5px;
 	-webkit-text-stroke-color: var(--white);
 	line-height: 1.2;
-	opacity: .8;
+	opacity: .9;
 }	
 
-
-main {
-	margin-left: 1.5rem;
-	margin-right: 1.5rem;
+main { /* ID: lyrics-container */
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1; 
+	overflow-y: auto;
 	margin-top: .5rem;
+}
+
+footer {
+	margin-top: 0.5rem;
+	text-align: center;
+	p {
+		display: inline-block;
+		font-size: .9rem;
+		margin: .5rem;
+		opacity: .82;
+	}
 }
 
 .word-count-input-container {
 	display: flex;
+	justify-items: center;
 	align-items: center;
-	column-gap: 3%;
+	column-gap: 1.4rem;
+	align-content:center;
+	margin-top: .7rem;
+	padding: .018rem 0;
 }
 
 .word-count-input-container > * > * {
-	padding: 0.25rem 0;
-	font-size: 1.1rem;
+	padding: .16rem 0 .14rem 0;
+	font-size: 1.05rem;
 }
 
 label {
-	background-color: #56565657;
-	opacity: .8;
+	background-color: #5656563b;
 }
 
 #word-count-input {
-  color: #448094;
+  color: var(--dark-ice-blue);
 	text-align: center;
 	width: 4rem;
-	opacity: .60;
-  margin-left: .5rem;
+	opacity: .70;
+	box-sizing: border-box;
+  margin-left: .2rem;
+}
+
+#word-count-input:focus {
+	opacity: .80;
 }
 
 ::placeholder {
 	color: var(--ice-blue);
-	opacity: .80;
+	opacity: .75;
+}
+
+:focus::placeholder {
+	opacity: .50;
 }
 
 button {
-	background: var(--trans-ice-blue);
+	font-family: "Bodoni Moda SC", futura, Roboto, 'Open Sans', 'Helvetica Neue', sans-serif;
+	font-size: 1.05rem;
 	color: var(--white);
-	font-size: 1rem;
-	border-radius: 12px;
-	border: 1.5px solid #444;
+	background: #78a2b0d9;
+	border-radius: 10px;
+	border: 1.5px solid #666;
 	box-shadow: 2px 3px #3a535b;
-	padding: 0.5rem .6rem !important;
+	padding: .05rem .62rem .18rem .62rem !important;
+	-webkit-text-stroke-width: .05px;
+	-webkit-text-stroke-color: var(--white);
 }
+
+#generate-smithsum-btn {
+	align-self: flex-start;
+	margin-top: .05rem;
+}
+
 .copy-btn {
-	margin-top: .8rem;
+	align-self: flex-end;
+	margin-top: 1rem;
 	width: 8rem;
-	float: right;
 }
 
 @media (hover: hover) {
@@ -123,11 +156,6 @@ button:active {
 	background: var(--ice-blue);
 	box-shadow: 1px 2px #445e66;
   transform: translateY(2px) translateX(2px);
-}
-
-.box {
-	background-color: var(--white);
-	box-sizing: border-box;
 }
 
 #error-message {
@@ -143,16 +171,16 @@ button:active {
 
 .lyrics-box {
 	opacity: .75;
-	min-height: 7rem;
-	margin-top: 1.0rem;
-	padding: 1.25% 1.75%;
+	overflow-y: auto;
+	margin-top: .5rem;
 }
 
 .lyrics-box p {
+	background-color: var(--white);
 	color: var(--dark-ice-blue);
-	font-size: 1.1rem;
 	line-height: 1.5;
 	margin: 0;
+	padding: 1.25% 1.75%;
 }
 
 .empty-lyrics-box {
@@ -165,6 +193,10 @@ span.line {
 	white-space: preserve nowrap;
 }
 
+.margins {
+	margin-left: 2.25rem;
+	margin-right: 2.25rem;
+}
 /* ================================================= */
 /* ================= MEDIA QUERIES ================= */
 /* ================================================= */
@@ -176,43 +208,66 @@ span.line {
 	h1 {
 		font-size: 3.2rem;
 	}
+	.margins {
+		margin-left: 1.75rem;
+		margin-right: 1.75rem;
+	}
 }
 
 /* ===================== PHONE ==================== */
 
 @media (max-width:625px) {
+	html {
+		overflow: scroll;
+	}
+
 	h1 {
 		font-size: 3.2rem;
 	}
+
 	.rocker-boys {
 		background-position: right;
 	}
-	h1 {
-		font-size: 3rem;
+
+	.margins {
+		margin-left: 1rem;
+		margin-right: 1rem;
 	}
-	main {
-		margin-left: .75rem;
-		margin-right: .75rem;
-	}
+	
 	.word-count-input-container {
 		align-items: unset;
 		flex-direction: column;
 		width: max-content;
 	}
+
 	.word-count-input-container > * > * {
 		font-size: 1.05rem;
 	}
+
 	button {
-		font-size: 1rem;
-		padding: 0.4rem .4rem !important; 
-		margin-top: .5rem;
+		font-size: .9rem;
 	}
+
+	#generate-smithsum-btn {
+		margin-top: .4rem;
+	}
+
 	#error-message {
 		padding-left: .2rem;
 	}
+
+	.lyrics-box {
+		scrollbar-width: none;  /* Firefox */
+		-ms-overflow-style: none;  /* IE and Edge */
+	}
+
+	.lyrics-box::--webkit-scrollbar {  /* Chrome */
+		width: 0;
+		background: transparent;
+	}
+
 	.lyrics-box p {
-		font-size: 1.1rem;
-		line-height: 1.6;
+		line-height: 1.5;
 	}
 }
 

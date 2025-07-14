@@ -211,7 +211,7 @@ span.line {
 	.margins {
 		margin-left: 1.75rem;
 		margin-right: 1.75rem;
-	}
+}
 }
 
 /* ===================== PHONE ==================== */
@@ -271,3 +271,16 @@ span.line {
 	}
 }
 
+/* ===================== SMALLER PHONE ==================== */
+@media (min-width:381px) and (max-width:430px){
+	h1 {
+		font-size: 2.9rem;
+	}
+}
+/* ===================== TINY PHONE ==================== */
+@media (max-width:380px){
+	h1 {
+		font-size: 2.5rem;
+		margin-left: .2rem;
+	}
+}

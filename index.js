@@ -11,6 +11,7 @@ const errorMessageEl = document.getElementById('error-message')
 const copyBtnEl = document.getElementById('copy-btn')
 let numWordsToGet = ''
 let songToGet = ''
+let songWordCount = ''
 
 wordCountInputEl.addEventListener('focus', () => {
 	if (wordCountInputEl.value) {
@@ -19,11 +20,9 @@ wordCountInputEl.addEventListener('focus', () => {
 })
 
 generateSmithsumBtnEl.addEventListener('click', () => {
-	numWordsToGet = Number(wordCountInputEl.value.trim())
-	// console.log(`numWordsToGet: ${numWordsToGet} \ntype is ${typeof numWordsToGet}`);
-
-	if (/\D/.test(numWordsToGet) || numWordsToGet > 300 || numWordsToGet === 0) {
-		errorMessageEl.innerHTML = "<p>Please enter a number between 1 and 300.</p>"
+	getWordCountInputEl()
+	// if there are non-digits, too many words, or  the number is 0...
+	if (/\D/.test(numWordsToGet) || numWordsToGet > 500 || numWordsToGet === 0) {
 	}
 	else {
 		generateLoremSmithsum()
@@ -36,85 +35,69 @@ copyBtnEl.addEventListener('click', copyLyricsToClipboard)
 // NOTE: I'm switching this over to an async function because copilot told me. that way i can 
 async function generateLoremSmithsum() {
 	try {
+		// get desired # of words
+		getWordCountInputEl()
 
-		getCorrectwordCountInputEl()
+		// TODO: Add provision for more than one song to be used AFTER i get the rest working
+			// Do/While loop should work.
 
 		// Call songList webscraper. Only do this ONCE.
 		const songList = await getSongList();
 
-		// Do/While loop
-		//DO: get a random song Id. harvest its lyrics, and convert to songList array.
+		// Get random songId from list
 		let indexToGet = Math.floor(Math.random(0, songList.length) * songList.length)
-			songToGet = songList[indexToGet]
-			console.log(`songToGet after await: ` + songToGet)
+		songToGet = (songList[indexToGet]).substring(6)
 
+		// Get lyrics from site; filter out junk
 
-		// WHILE: the actual wordcount is <  numWordsToGet
-	
+		// WATCH: Once I'm adding more lyrics I might need to declare the variable globally.
+		let lyrics = await getLyrics(songToGet)
 
 		// Strip unneeded tags; convert string to array; count words. 
 
-				// If numwordstoget < array.length, grab that number of words and display. if it's greater, call  getSongList again. 
-				// PROBLEM: is this going to fuck up the async stuff? I think some of this definitely needs to be moved out of the generateLoremSmithsum() function.
-
-			// TODO: Decide on lyrics formatting - how do I want the lyrics to look? remove breaks, possibly punctuation.
-
-			// TODO: Convert string to array
+		// TODO: If numwordstoget < array.length, grab that number of words and display. 
+		// If it's greater, call getSongList again. 
 
 			// Display lyricsWrapper box
 			lyricsBoxEl.classList.replace('empty-lyrics-box', 'lyrics-box')
 			copyBtnEl.classList.replace('empty-lyrics-box', 'copy-btn')
 
-		// TEMPORARY: DISPLAY ID # for songList[0]
 			// Insert lyrics
-			displayLyrics(songToGet) // This stays synchronous! (Within the order of the function, I guess.)
+		displayLyrics(lyrics) // This stays synchronous!
 	}
 	catch (err) {
 		console.log(err)
 	}
 }
 
-// This needs a better name but it'll work for now.
-function getCorrectwordCountInputEl() {
-	numWordsToGet = wordCountInputEl.value
-	console.log(`getCorrectwordCountInputEl() function.
-		number of words to get: ${numWordsToGet}`);
-
-	// TODO: THE PROBLEM: numWordsToGet is reset to '' in clearerrorMessageEl, but then that creates an endless loop. How to make it wait until it gets new input from user? or maybe the validation should be in a sep step? i know i've done this before....
-	////////////// TODO: ** IS THIS PROBLEM STILL HAPPENING? CANT REMEMBER. Check it out.
+function getWordCountInputEl() {
+	numWordsToGet = Number(wordCountInputEl.value.trim())
 
 	// Clear any existing content
 	lyricsBoxEl.innerHTML = ''
-	// numWordsToGet = ''
-	// console.log("Getting # words: " + numWordsToGet);
 
 	return numWordsToGet
 }
 
 function clearInput() {
-	console.log(`inside clearInput()`);
 	errorMessageEl.innerHTML = ''
 	wordCountInputEl.value = ''
-	// lyricsBoxEl.textContent = ''
+	lyricsBoxEl.textContent = ''
 }
 
-function displayLyrics(songToGet) {
-	// console.log(`word count is ${numWordsToGet}`);
+function displayLyrics(lyrics) {
 	console.log(`displayLyrics() function called.`);
 	console.log("songToGet is " + songToGet)
 	console.log(`word count is ${numWordsToGet}`);
 
 	const lyricsEl = document.createElement("p")
 	lyricsEl.id = 'lyrics-el'
-	let testLyrics = "girlfriend in a coma i know, i know, it's serious. there were times when I could've murdered her."
 
-	// passing songToGet is temporary! It'll only be used to get that song's yrics
-	lyricsEl.innerHTML = songToGet + ":&ensp;" + testLyrics
+	lyricsEl.innerHTML = lyrics
 
+	// Remove lyrics generated from a previous button click
+	document.getElementById('lyrics-el') ? lyricsBoxEl.removeChild(lyricsEl) : null
 
-	// I need to have the previously generated lyrics cleared out, which means removing the appended paragraph before running this line again.
-	document.getElementById('lyrics-el') ? "there is at least one testLyrics element." : "no testLyrics element exists."
-	// lyricsBoxEl.removeChild(lyricsEl)
 	lyricsBoxEl.appendChild(lyricsEl)
 }
 
@@ -128,8 +111,6 @@ async function copyLyricsToClipboard() {
 }
 
 async function getSongList() {
-	console.log(`inside song:istURL()`);
-
 	const songListUrl = 'https://songmeanings.com/artist/view/songs/464/'
 	//  get data from axios
 	const { data } = await axios.get(songListUrl)
@@ -141,17 +122,32 @@ async function getSongList() {
 	$('#songslist tr').each((i, elem) => {
 		// get ID of each song
 		const songId = $(elem).attr('id');
-
-		// add song-id to arrayOfSongIds array
+		// add songId to arrayOfSongIds array
 		arrayOfSongIds.push(songId);
 	})
 	return arrayOfSongIds;
 }
 
 
-// how i was using getSongList() before converting generateLorumSmithsum() into async:
-// getSongList().then(songList => {
-// 	songResult = songList[0]
-// 	console.log(`songResult inside generateLoremSmithsum (inside the then function): ${songResult}`)
-// 	return songResult
-// }
+async function getLyrics(songToGet) {
+	const songUrl = `https://songmeanings.com/songs/view/${songToGet}/`
+	const { data } = await axios.get(songUrl) //  get data from axios
+	const $ = load(data) // load data into cheerio
+	const rawLyrics = $('div.none').html() //convert into usable text
+	
+	// const lyrics = formatLyrics(rawLyrics)
+	// can i just return this and assign it to lyrics variable when i call it???
+	return formatLyrics(rawLyrics)
+}
+
+function formatLyrics(rawLyrics) {
+	const tagRegEx = /(\s<br|<br|<div|<\/div)[^>]*>/g
+	const spaceFix = /(\.\s){2,}/g
+	const punctuationFix = /\s?([:?])"?\.?/g
+	
+	let formattedLyrics = rawLyrics.replace(tagRegEx, '. ').replace(spaceFix, '. ').replace(punctuationFix, "$1")
+
+	songWordCount = formattedLyrics.split(' ').length
+
+	return formattedLyrics
+}

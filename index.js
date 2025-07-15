@@ -7,7 +7,7 @@ import { load } from 'https://cdn.jsdelivr.net/npm/cheerio@1.1.0/+esm'
 const wordCountInputEl = document.getElementById('word-count-input')
 const generateSmithsumBtnEl = document.getElementById('generate-smithsum-btm')
 const lyricsBoxEl = document.getElementById('lyrics-box')
-const errorMessageEl = document.getElementById('error-message')
+const errorMessageDiv = document.getElementById('error-message-div')
 const copyBtnEl = document.getElementById('copy-btn')
 let numWordsToGet = ''
 let songToGet = ''

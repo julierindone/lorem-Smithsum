@@ -159,14 +159,15 @@ button:active {
 }
 
 #error-message {
-	margin-bottom: .5rem;
-}
-
-#error-message p {
-	color: red;
-	font-size: 1rem;
-	background: #4b4a4ab0;
-	display: inline;
+	font-size: 1.05rem;
+	color: #ff6b80;
+	text-shadow: 0 0 .75px black;
+	background-color: #3e3e3eb8;
+	margin-top: .25rem;
+	margin-bottom: .25rem;
+	display: inline-block;
+	padding: .05rem .05rem .05rem 0;
+	border-radius: 2px;
 }
 
 .lyrics-box {
@@ -252,7 +253,7 @@ span.line {
 		margin-top: .4rem;
 	}
 
-	#error-message {
+	#error-message-div {
 		padding-left: .2rem;
 	}
 

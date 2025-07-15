@@ -14,6 +14,10 @@ let songToGet = ''
 let songWordCount = ''
 
 wordCountInputEl.addEventListener('focus', () => {
+	const errorMessageEl = document.getElementById('error-message')
+	if (errorMessageEl) {
+		errorMessageEl.remove()
+	}
 	if (wordCountInputEl.value) {
 		clearInput()
 	}
@@ -23,6 +27,11 @@ generateSmithsumBtnEl.addEventListener('click', () => {
 	getWordCountInputEl()
 	// if there are non-digits, too many words, or  the number is 0...
 	if (/\D/.test(numWordsToGet) || numWordsToGet > 500 || numWordsToGet === 0) {
+		// WTF: I shouldn't have to declare this 3 times. better way to handle it?
+		const errorMessageEl = document.getElementById('error-message')
+		if (!(errorMessageEl)) {
+			displayErrorMessage()
+		}
 	}
 	else {
 		generateLoremSmithsum()
@@ -128,6 +137,15 @@ async function getSongList() {
 	return arrayOfSongIds;
 }
 
+function displayErrorMessage() {
+	// Create element
+	const errorMessageEl = document.createElement('p')
+	errorMessageEl.id = 'error-message'
+	errorMessageEl.innerHTML = "Please enter a number between 1 and 500."
+
+	// Append element to parent
+	errorMessageDiv.append(errorMessageEl)
+}
 
 async function getLyrics(songToGet) {
 	const songUrl = `https://songmeanings.com/songs/view/${songToGet}/`

@@ -1,11 +1,8 @@
-// import axios from 'axios'
-// import { load } from 'cheerio'
-
 import axios from 'https://cdn.jsdelivr.net/npm/axios@1.6.8/+esm'
 import { load } from 'https://cdn.jsdelivr.net/npm/cheerio@1.1.0/+esm'
 
 const wordCountInputEl = document.getElementById('word-count-input')
-const generateSmithsumBtnEl = document.getElementById('generate-smithsum-btm')
+const generateSmithsumBtnEl = document.getElementById('generate-smithsum-btn')
 const lyricsBoxEl = document.getElementById('lyrics-box')
 const errorMessageEl = document.getElementById('error-message')
 const copyBtnEl = document.getElementById('copy-btn')
@@ -14,15 +11,14 @@ let songToGet = ''
 let songWordCount = ''
 
 wordCountInputEl.addEventListener('focus', () => {
-	if (wordCountInputEl.value) {
 		clearInput()
-	}
 })
 
 generateSmithsumBtnEl.addEventListener('click', () => {
 	getWordCountInputEl()
 	// if there are non-digits, too many words, or  the number is 0...
 	if (/\D/.test(numWordsToGet) || numWordsToGet > 500 || numWordsToGet === 0) {
+		errorMessageEl.innerHTML = "<p>Please enter a number between 1 and 900.</p>"
 	}
 	else {
 		generateLoremSmithsum()
@@ -31,15 +27,14 @@ generateSmithsumBtnEl.addEventListener('click', () => {
 
 copyBtnEl.addEventListener('click', copyLyricsToClipboard)
 
-// on button click
-// NOTE: I'm switching this over to an async function because copilot told me. that way i can 
 async function generateLoremSmithsum() {
 	try {
-		// get desired # of words
 		getWordCountInputEl()
 
 		// TODO: Add provision for more than one song to be used AFTER i get the rest working
 			// Do/While loop should work.
+		// DO: get a random song Id. harvest its lyrics.
+		// do {
 
 		// Call songList webscraper. Only do this ONCE.
 		const songList = await getSongList();
@@ -53,14 +48,12 @@ async function generateLoremSmithsum() {
 		// WATCH: Once I'm adding more lyrics I might need to declare the variable globally.
 		let lyrics = await getLyrics(songToGet)
 
-		// Strip unneeded tags; convert string to array; count words. 
-
 		// TODO: If numwordstoget < array.length, grab that number of words and display. 
 		// If it's greater, call getSongList again. 
 
 			// Display lyricsWrapper box
-			lyricsBoxEl.classList.replace('empty-lyrics-box', 'lyrics-box')
-			copyBtnEl.classList.replace('empty-lyrics-box', 'copy-btn')
+		lyricsBoxEl.classList.replace('hidden-element', 'lyrics-box')
+		copyBtnEl.classList.replace('hidden-element', 'copy-btn')
 
 			// Insert lyrics
 		displayLyrics(lyrics) // This stays synchronous!
@@ -75,6 +68,7 @@ function getWordCountInputEl() {
 
 	// Clear any existing content
 	lyricsBoxEl.innerHTML = ''
+	copyBtnEl.classList.replace('copy-btn', 'hidden-element')
 
 	return numWordsToGet
 }
@@ -82,7 +76,6 @@ function getWordCountInputEl() {
 function clearInput() {
 	errorMessageEl.innerHTML = ''
 	wordCountInputEl.value = ''
-	lyricsBoxEl.textContent = ''
 }
 
 function displayLyrics(lyrics) {
@@ -101,13 +94,10 @@ function displayLyrics(lyrics) {
 	lyricsBoxEl.appendChild(lyricsEl)
 }
 
-// It doesn't seem to matter if this is async or not.
-async function copyLyricsToClipboard() {
-	console.log(`copyLyricsToClipboard() function`);
-
+function copyLyricsToClipboard() {
 	let copiedLyrics = document.getElementById('lyrics-el')
-
 	navigator.clipboard.writeText(copiedLyrics.textContent)
+	alert("lorem smithsum has been copied to your clipboard.")
 }
 
 async function getSongList() {
@@ -118,6 +108,7 @@ async function getSongList() {
 	let $ = load(data)
 	// declare arrayOfSongIds variable
 	const arrayOfSongIds = []
+
 	// Loop through needed data (songs) & push to array
 	$('#songslist tr').each((i, elem) => {
 		// get ID of each song
@@ -128,15 +119,12 @@ async function getSongList() {
 	return arrayOfSongIds;
 }
 
-
 async function getLyrics(songToGet) {
 	const songUrl = `https://songmeanings.com/songs/view/${songToGet}/`
 	const { data } = await axios.get(songUrl) //  get data from axios
 	const $ = load(data) // load data into cheerio
 	const rawLyrics = $('div.none').html() //convert into usable text
 	
-	// const lyrics = formatLyrics(rawLyrics)
-	// can i just return this and assign it to lyrics variable when i call it???
 	return formatLyrics(rawLyrics)
 }
 

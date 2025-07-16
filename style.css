@@ -1,7 +1,6 @@
 /* Screen width: 1251px - 1999px */
 
 :root {
-	/* --white: whiteSmoke; */
 	--white: #fbfbfb;
 	--dark-gray: #2f2f2f;
 	--ice-blue: #78a2b0;
@@ -43,18 +42,16 @@ body, html {
 
 .color-band {
 	background-color: var(--trans-ice-blue);
-	/* opacity: .82; */
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
 	margin-top: 5%;
-	margin-bottom: 1%;
 	padding: 2%;
 }	
 
 h1 {
-	font-size: 4.5rem;
+	font-size: 4.2rem;
 	margin: 0;
 	-webkit-text-stroke-width: .5px;
 	-webkit-text-stroke-color: var(--white);
@@ -62,12 +59,21 @@ h1 {
 	opacity: .9;
 }	
 
-main { /* ID: lyrics-container */
+main {
 	display: flex;
 	flex-direction: column;
 	flex-grow: 1; 
 	overflow-y: auto;
-	margin-top: .5rem;
+	margin-left: 1.75rem;
+	margin-right: 1.75rem;
+}
+
+.lyrics-container {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1; 
+	overflow-y: auto;
+	margin-top: .9rem;
 }
 
 footer {
@@ -87,8 +93,8 @@ footer {
 	align-items: center;
 	column-gap: 1.4rem;
 	align-content:center;
-	margin-top: .7rem;
-	padding: .018rem 0;
+	margin-top: .8rem;
+	padding: .018rem 0; /* WATCH: what is the purpose of this padding? */
 }
 
 .word-count-input-container > * > * {
@@ -97,7 +103,7 @@ footer {
 }
 
 label {
-	background-color: #5656563b;
+	background: #5656563b;
 }
 
 #word-count-input {
@@ -142,7 +148,7 @@ button {
 
 .copy-btn {
 	align-self: flex-end;
-	margin-top: 1rem;
+	margin-top: .9rem;
 	width: 8rem;
 }
 
@@ -157,35 +163,33 @@ button:active {
 	box-shadow: 1px 2px #445e66;
   transform: translateY(2px) translateX(2px);
 }
-
-#error-message {
-	margin-bottom: .5rem;
-}
-
+	
 #error-message p {
-	color: red;
 	font-size: 1rem;
+	color: #ff6b80;
+	text-shadow: 0 0 .75px black;
 	background: #4b4a4ab0;
-	display: inline;
+	display: inline-block;
+	margin-top:.8rem;
+	margin-bottom: 0;
 }
-
-.lyrics-box {
+	
+#lyrics-box {
 	opacity: .75;
 	overflow-y: auto;
-	margin-top: .5rem;
 }
 
-.lyrics-box p {
+#lyrics-box p {
 	background-color: var(--white);
 	color: var(--dark-ice-blue);
 	line-height: 1.5;
 	margin: 0;
 	padding: 1.25% 1.75%;
+	min-height: 18rem;
 }
 
-.empty-lyrics-box {
+.hidden-element {
 	display: none;
-	opacity:.15;
 }
 
 span.line {
@@ -193,10 +197,6 @@ span.line {
 	white-space: preserve nowrap;
 }
 
-.margins {
-	margin-left: 2.25rem;
-	margin-right: 2.25rem;
-}
 /* ================================================= */
 /* ================= MEDIA QUERIES ================= */
 /* ================================================= */
@@ -208,7 +208,7 @@ span.line {
 	h1 {
 		font-size: 3.2rem;
 	}
-	.margins {
+	main {
 		margin-left: 1.75rem;
 		margin-right: 1.75rem;
 }
@@ -229,7 +229,7 @@ span.line {
 		background-position: right;
 	}
 
-	.margins {
+	main {
 		margin-left: 1rem;
 		margin-right: 1rem;
 	}

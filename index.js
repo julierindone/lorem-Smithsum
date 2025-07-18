@@ -51,10 +51,6 @@ async function generateLoremSmithsum() {
 		// TODO: If numwordstoget < array.length, grab that number of words and display. 
 		// If it's greater, call getSongList again. 
 
-			// Display lyricsWrapper box
-		lyricsBoxEl.classList.replace('hidden-element', 'lyrics-box')
-		copyBtnEl.classList.replace('hidden-element', 'copy-btn')
-
 			// Insert lyrics
 		displayLyrics(lyrics) // This stays synchronous!
 	}
@@ -79,10 +75,11 @@ function clearInput() {
 }
 
 function displayLyrics(lyrics) {
-	console.log(`displayLyrics() function called.`);
-	console.log("songToGet is " + songToGet)
-	console.log(`word count is ${numWordsToGet}`);
+	// Display lyricsWrapper box
+	lyricsBoxEl.classList.replace('hidden-element', 'lyrics-box')
+	copyBtnEl.classList.replace('hidden-element', 'copy-btn')
 
+	// Create lyrics element
 	const lyricsEl = document.createElement("p")
 	lyricsEl.id = 'lyrics-el'
 

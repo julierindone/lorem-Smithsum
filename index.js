@@ -8,11 +8,11 @@ const errorMessageEl = document.getElementById('error-message')
 const copyBtnEl = document.getElementById('copy-btn')
 
 let formattedLyrics = ''
-let lyrics = ''
 let numWordsToGet = ''
 let songList = []
 let songToGet = ''
 let songWordCount = ''
+let rawLyrics = ''
 
 // Get list of all songs by the Smiths as soon as the page loads
 document.addEventListener("DOMContentLoaded", async () => {
@@ -39,11 +39,11 @@ copyBtnEl.addEventListener('click', copyLyricsToClipboard)
 
 async function generateLoremSmithsum() {
 	try {
-		lyrics = await getLyrics() // Get lyrics from site; filter out junk
+		await getLyrics()  // get lyrics from source
 
-		// TRY moving displayLyrics out of generateLoremSmithsum
-			// Insert lyrics
-		displayLyrics(formattedLyrics)
+		formatLyrics()  // format for display
+
+		displayLyrics()  // display lyrics in UI
 	}
 	catch (err) {
 		console.log(err)
@@ -63,8 +63,8 @@ function clearInput() {
 	wordCountInputEl.value = ''
 }
 
-function displayLyrics(formattedLyrics) {
-	// Display lyricsWrapper box
+function displayLyrics() {
+	// display lyricsWrapper box
 	lyricsBoxEl.classList.replace('hidden-element', 'lyrics-box')
 	copyBtnEl.classList.replace('hidden-element', 'copy-btn')
 
@@ -107,14 +107,11 @@ async function getLyrics() {
 	const songUrl = `https://songmeanings.com/songs/view/${songToGet}/`
 	const { data } = await axios.get(songUrl) //  get data from axios
 	const $ = load(data) // load data into cheerio
-	const rawLyrics = $('div.none').html() //convert into usable text
+	rawLyrics = $('div.none').html() //convert into usable text	
 	
 	//  filter out instrumentals
 	if (rawLyrics.length < 50) {
-		lyrics = await getLyrics()  // call getLyrics() again.
-	}
-	else {
-	return formatLyrics(rawLyrics)
+		await getLyrics()  // call getLyrics() again.
 	}
 }
 
@@ -123,7 +120,7 @@ function pickSongId() {
 	return (songList[indexToGet]).substring(6)
 }
 
-function formatLyrics(rawLyrics) {
+function formatLyrics() {
 	const tagRegEx = /(\s<br|<br|<div|<\/div)[^>]*>/g
 	const spaceFix = /(\.\s){2,}/g
 	const punctuationFix = /\s?([:?])"?\.?/g

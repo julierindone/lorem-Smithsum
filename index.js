@@ -7,7 +7,7 @@ const lyricsBoxEl = document.getElementById('lyrics-box')
 const errorMessageEl = document.getElementById('error-message')
 const copyBtnEl = document.getElementById('copy-btn')
 
-let formattedLyrics = ''
+let lyrics = ''
 let numWordsToGet = ''
 let songList = []
 let songToGet = ''
@@ -21,14 +21,14 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 // Clear input and related error messages upon focus on word count input box 
 wordCountInputEl.addEventListener('focus', () => {
-		clearInput()
+	clearInput()
 })
 
 generateSmithsumBtnEl.addEventListener('click', () => {
 	numWordsToGet = getWordCountInputEl()
 	// if there are non-digits, too many words, or the number is 0...
-	if (/\D/.test(numWordsToGet) || numWordsToGet > 500 || numWordsToGet === 0) {
-		errorMessageEl.innerHTML = "<p>Please enter a number between 1 and 900.</p>"
+	if (/\D/.test(numWordsToGet) || numWordsToGet > 5000 || numWordsToGet === 0) {
+		errorMessageEl.innerHTML = "<p>Please enter a number between 1 and 5000.</p>"
 	}
 	else {
 		generateLoremSmithsum()
@@ -39,11 +39,15 @@ copyBtnEl.addEventListener('click', copyLyricsToClipboard)
 
 async function generateLoremSmithsum() {
 	try {
-		await getLyrics()  // get lyrics from source
+		resetLyrics() // reset word count and clears previously set of lyrics
 
-		formatLyrics()  // format for display
+		do {
+			await getLyrics()  // get lyrics from source
+			formatLyrics()  // format for display
+		}
+		while (numWordsToGet > songWordCount);
 
-		displayLyrics()  // display lyrics in UI
+		displayLyrics()  // display final lyrics in UI
 	}
 	catch (err) {
 		console.log(err)
@@ -71,7 +75,7 @@ function displayLyrics() {
 	const lyricsEl = document.createElement("p")  // create lyrics element
 	lyricsEl.id = 'lyrics-el'
 
-	lyricsEl.innerHTML = formattedLyrics  // insert content
+	lyricsEl.innerHTML = lyrics  // insert content
 
 	// remove lyrics generated from a previous button click
 	document.getElementById('lyrics-el') ? lyricsBoxEl.removeChild(lyricsEl) : null
@@ -100,15 +104,14 @@ async function getSongList() {
 	})
 }
 
-async function getLyrics() { 
+async function getLyrics() {
 	songToGet = pickSongId()  // Get random songId from list
 	const songUrl = `https://songmeanings.com/songs/view/${songToGet}/`
 	const { data } = await axios.get(songUrl) //  get data from axios
 	const $ = load(data) // load data into cheerio
 	rawLyrics = $('div.none').html() //convert into usable text	
-	
-	//  filter out instrumentals
-	if (rawLyrics.length < 50) {
+
+	if (rawLyrics.length < 50) {  //  filter out instrumentals
 		await getLyrics()  // call getLyrics() again.
 	}
 }
@@ -122,8 +125,14 @@ function formatLyrics() {
 	const tagRegEx = /(\s<br|<br|<div|<\/div)[^>]*>/g
 	const spaceFix = /(\.\s){2,}/g
 	const punctuationFix = /\s?([:?])"?\.?/g
-	
-	formattedLyrics = rawLyrics.replace(tagRegEx, '. ').replace(spaceFix, '. ').replace(punctuationFix, "$1")
+	let formattedLyrics = rawLyrics.replace(tagRegEx, '. ').replace(spaceFix, '. ').replace(punctuationFix, "$1")
+	let formattedLyricsArray = formattedLyrics.split(' ').slice(0, numWordsToGet);
 
-	return formattedLyrics
+	songWordCount += formattedLyrics.length
+	lyrics += " " + formattedLyricsArray.join(' ')
+}
+
+function resetLyrics() {
+	songWordCount = 0
+	lyrics = ''
 }

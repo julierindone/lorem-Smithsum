@@ -110,7 +110,7 @@ label {
   color: var(--dark-ice-blue);
 	text-align: center;
 	width: 4rem;
-	opacity: .70;
+	opacity: .75;
 	box-sizing: border-box;
   margin-left: .2rem;
 }
@@ -130,13 +130,13 @@ label {
 
 button {
 	font-family: "Bodoni Moda SC", futura, Roboto, 'Open Sans', 'Helvetica Neue', sans-serif;
-	font-size: 1.05rem;
+	font-size: 1.075rem;
 	color: var(--white);
-	background: #78a2b0d9;
+	background: #85b2c2d9;
 	border-radius: 10px;
-	border: 1.5px solid #666;
-	box-shadow: 2px 3px #3a535b;
-	padding: .05rem .62rem .18rem .62rem !important;
+	border: 1px solid #58828f;
+	box-shadow: 3px 3px #578390ed;
+	padding: .04rem .62rem .18rem .62rem !important;
 	-webkit-text-stroke-width: .05px;
 	-webkit-text-stroke-color: var(--white);
 }
@@ -154,14 +154,16 @@ button {
 
 @media (hover: hover) {
 	button:hover {
-		background: var(--ice-blue);
+		background: #71a2b1eb;
+		box-shadow: 3px 3px #4e7885f7;
+		transition: background-color .1s ease-in-out, box-shadow .1s ease-in-out;
 	}
 }
 
 button:active {
-	background: var(--ice-blue);
-	box-shadow: 1px 2px #445e66;
-  transform: translateY(2px) translateX(2px);
+	background: #5f8b99f2;
+	box-shadow: 2px 2px #3f626c;
+	transform: translateY(2px) translateX(2px);
 }
 	
 #error-message p {
@@ -172,10 +174,13 @@ button:active {
 	display: inline-block;
 	margin-top:.8rem;
 	margin-bottom: 0;
+	padding: .05rem .05rem .05rem 0;
+	border-radius: 2px;
 }
-	
+
+/* TODO: Add a smoother transition when displaying the lyrics. */
 #lyrics-box {
-	opacity: .75;
+	opacity: .8;
 	overflow-y: auto;
 }
 
@@ -252,10 +257,6 @@ span.line {
 		margin-top: .4rem;
 	}
 
-	#error-message {
-		padding-left: .2rem;
-	}
-
 	.lyrics-box {
 		scrollbar-width: none;  /* Firefox */
 		-ms-overflow-style: none;  /* IE and Edge */
@@ -282,5 +283,9 @@ span.line {
 	h1 {
 		font-size: 2.5rem;
 		margin-left: .2rem;
+	}
+	main {
+		margin-left: .5rem;
+		margin-right: .5rem;
 	}
 }

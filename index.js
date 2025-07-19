@@ -6,17 +6,27 @@ const generateSmithsumBtnEl = document.getElementById('generate-smithsum-btn')
 const lyricsBoxEl = document.getElementById('lyrics-box')
 const errorMessageEl = document.getElementById('error-message')
 const copyBtnEl = document.getElementById('copy-btn')
+
+let formattedLyrics = ''
+let lyrics = ''
 let numWordsToGet = ''
+let songList = []
 let songToGet = ''
 let songWordCount = ''
 
+// Get list of all songs by the Smiths as soon as the page loads
+document.addEventListener("DOMContentLoaded", async () => {
+	await getSongList();
+})
+
+// Clear input and related error messages upon focus on word count input box 
 wordCountInputEl.addEventListener('focus', () => {
 		clearInput()
 })
 
 generateSmithsumBtnEl.addEventListener('click', () => {
-	getWordCountInputEl()
-	// if there are non-digits, too many words, or  the number is 0...
+	numWordsToGet = getWordCountInputEl()
+	// if there are non-digits, too many words, or the number is 0...
 	if (/\D/.test(numWordsToGet) || numWordsToGet > 500 || numWordsToGet === 0) {
 		errorMessageEl.innerHTML = "<p>Please enter a number between 1 and 900.</p>"
 	}
@@ -29,30 +39,11 @@ copyBtnEl.addEventListener('click', copyLyricsToClipboard)
 
 async function generateLoremSmithsum() {
 	try {
-		getWordCountInputEl()
+		lyrics = await getLyrics() // Get lyrics from site; filter out junk
 
-		// TODO: Add provision for more than one song to be used AFTER i get the rest working
-			// Do/While loop should work.
-		// DO: get a random song Id. harvest its lyrics.
-		// do {
-
-		// Call songList webscraper. Only do this ONCE.
-		const songList = await getSongList();
-
-		// Get random songId from list
-		let indexToGet = Math.floor(Math.random(0, songList.length) * songList.length)
-		songToGet = (songList[indexToGet]).substring(6)
-
-		// Get lyrics from site; filter out junk
-
-		// WATCH: Once I'm adding more lyrics I might need to declare the variable globally.
-		let lyrics = await getLyrics(songToGet)
-
-		// TODO: If numwordstoget < array.length, grab that number of words and display. 
-		// If it's greater, call getSongList again. 
-
+		// TRY moving displayLyrics out of generateLoremSmithsum
 			// Insert lyrics
-		displayLyrics(lyrics) // This stays synchronous!
+		displayLyrics(formattedLyrics)
 	}
 	catch (err) {
 		console.log(err)
@@ -60,13 +51,11 @@ async function generateLoremSmithsum() {
 }
 
 function getWordCountInputEl() {
-	numWordsToGet = Number(wordCountInputEl.value.trim())
-
-	// Clear any existing content
+	// clear/hide any existing lyrics and copy button
 	lyricsBoxEl.innerHTML = ''
 	copyBtnEl.classList.replace('copy-btn', 'hidden-element')
 
-	return numWordsToGet
+	return Number(wordCountInputEl.value.trim())
 }
 
 function clearInput() {
@@ -74,7 +63,7 @@ function clearInput() {
 	wordCountInputEl.value = ''
 }
 
-function displayLyrics(lyrics) {
+function displayLyrics(formattedLyrics) {
 	// Display lyricsWrapper box
 	lyricsBoxEl.classList.replace('hidden-element', 'lyrics-box')
 	copyBtnEl.classList.replace('hidden-element', 'copy-btn')
@@ -83,7 +72,7 @@ function displayLyrics(lyrics) {
 	const lyricsEl = document.createElement("p")
 	lyricsEl.id = 'lyrics-el'
 
-	lyricsEl.innerHTML = lyrics
+	lyricsEl.innerHTML = formattedLyrics  // insert content
 
 	// Remove lyrics generated from a previous button click
 	document.getElementById('lyrics-el') ? lyricsBoxEl.removeChild(lyricsEl) : null
@@ -103,17 +92,14 @@ async function getSongList() {
 	const { data } = await axios.get(songListUrl)
 	// pass data to cheerio
 	let $ = load(data)
-	// declare arrayOfSongIds variable
-	const arrayOfSongIds = []
 
 	// Loop through needed data (songs) & push to array
 	$('#songslist tr').each((i, elem) => {
 		// get ID of each song
 		const songId = $(elem).attr('id');
 		// add songId to arrayOfSongIds array
-		arrayOfSongIds.push(songId);
+		songList.push(songId);
 	})
-	return arrayOfSongIds;
 }
 
 async function getLyrics(songToGet) {
@@ -130,9 +116,7 @@ function formatLyrics(rawLyrics) {
 	const spaceFix = /(\.\s){2,}/g
 	const punctuationFix = /\s?([:?])"?\.?/g
 	
-	let formattedLyrics = rawLyrics.replace(tagRegEx, '. ').replace(spaceFix, '. ').replace(punctuationFix, "$1")
-
-	songWordCount = formattedLyrics.split(' ').length
+	formattedLyrics = rawLyrics.replace(tagRegEx, '. ').replace(spaceFix, '. ').replace(punctuationFix, "$1")
 
 	return formattedLyrics
 }

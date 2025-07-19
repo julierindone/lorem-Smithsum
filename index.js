@@ -68,16 +68,15 @@ function displayLyrics() {
 	lyricsBoxEl.classList.replace('hidden-element', 'lyrics-box')
 	copyBtnEl.classList.replace('hidden-element', 'copy-btn')
 
-	// Create lyrics element
-	const lyricsEl = document.createElement("p")
+	const lyricsEl = document.createElement("p")  // create lyrics element
 	lyricsEl.id = 'lyrics-el'
 
 	lyricsEl.innerHTML = formattedLyrics  // insert content
 
-	// Remove lyrics generated from a previous button click
+	// remove lyrics generated from a previous button click
 	document.getElementById('lyrics-el') ? lyricsBoxEl.removeChild(lyricsEl) : null
 
-	lyricsBoxEl.appendChild(lyricsEl)
+	lyricsBoxEl.appendChild(lyricsEl)  // add element to the div
 }
 
 function copyLyricsToClipboard() {
@@ -95,10 +94,9 @@ async function getSongList() {
 
 	// Loop through needed data (songs) & push to array
 	$('#songslist tr').each((i, elem) => {
-		// get ID of each song
-		const songId = $(elem).attr('id');
-		// add songId to arrayOfSongIds array
-		songList.push(songId);
+		const songId = $(elem).attr('id');  // get ID of each song
+
+		songList.push(songId);  // add songId to arrayOfSongIds array
 	})
 }
 

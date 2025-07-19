@@ -102,13 +102,25 @@ async function getSongList() {
 	})
 }
 
-async function getLyrics(songToGet) {
+async function getLyrics() { 
+	songToGet = pickSongId()  // Get random songId from list
 	const songUrl = `https://songmeanings.com/songs/view/${songToGet}/`
 	const { data } = await axios.get(songUrl) //  get data from axios
 	const $ = load(data) // load data into cheerio
 	const rawLyrics = $('div.none').html() //convert into usable text
 	
+	//  filter out instrumentals
+	if (rawLyrics.length < 50) {
+		lyrics = await getLyrics()  // call getLyrics() again.
+	}
+	else {
 	return formatLyrics(rawLyrics)
+	}
+}
+
+function pickSongId() {
+	let indexToGet = Math.floor(Math.random(0, songList.length) * songList.length)
+	return (songList[indexToGet]).substring(6)
 }
 
 function formatLyrics(rawLyrics) {

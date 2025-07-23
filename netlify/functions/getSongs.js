@@ -20,7 +20,7 @@ export async function handler (event, context) {
 
 		const scrapedContent = {
 			songList: songList
-		}		
+		}
 
 		return {
 			statusCode: 200,

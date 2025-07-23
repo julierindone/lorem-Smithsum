@@ -1,4 +1,3 @@
-// import axios from 'https://cdn.jsdelivr.net/npm/axios@1.6.8/+esm'
 import { load } from 'https://cdn.jsdelivr.net/npm/cheerio@1.1.0/+esm'
 
 const wordCountInputEl = document.getElementById('word-count-input')
@@ -90,13 +89,13 @@ function copyLyricsToClipboard() {
 }
 
 async function getSongList() {
-	const response = await fetch('netlify/functions/get-songs')
+	const response = await fetch('/.netlify/functions/getSongs')
 	const result = await response.json()
 	if (response.ok) {
-		// console.log(result.scrapedData);
 		// console.log("scrapedData.songList[1]:" + result.scrapedData.songList[1])
 		// Do something with it
 		songList = result.scrapedData.songList
+		console.log(`Response was ok! Song IDs:`);
 		console.log(songList);
 
 		

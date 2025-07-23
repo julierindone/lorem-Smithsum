@@ -1,4 +1,4 @@
-import axios from 'https://cdn.jsdelivr.net/npm/axios@1.6.8/+esm'
+// import axios from 'https://cdn.jsdelivr.net/npm/axios@1.6.8/+esm'
 import { load } from 'https://cdn.jsdelivr.net/npm/cheerio@1.1.0/+esm'
 
 const wordCountInputEl = document.getElementById('word-count-input')
@@ -41,13 +41,13 @@ async function generateLoremSmithsum() {
 	try {
 		resetLyrics() // reset word count and clears previously set of lyrics
 
-		do {
-			await getLyrics()  // get lyrics from source
-			formatLyrics()  // format for display
-		}
-		while (numWordsToGet > songWordCount);
+		// do {
+		// 	await getLyrics()  // get lyrics from source
+		// 	formatLyrics()  // format for display
+		// }
+		// while (numWordsToGet > songWordCount);
 
-		displayLyrics()  // display final lyrics in UI
+		// displayLyrics()  // display final lyrics in UI
 	}
 	catch (err) {
 		console.log(err)
@@ -90,18 +90,19 @@ function copyLyricsToClipboard() {
 }
 
 async function getSongList() {
-	const songListUrl = 'https://songmeanings.com/artist/view/songs/464/'
-	//  get data from axios
-	const { data } = await axios.get(songListUrl)
-	// pass data to cheerio
-	let $ = load(data)
+	const response = await fetch('netlify/functions/get-songs')
+	const result = await response.json()
+	if (response.ok) {
+		// console.log(result.scrapedData);
+		// console.log("scrapedData.songList[1]:" + result.scrapedData.songList[1])
+		// Do something with it
+		songList = result.scrapedData.songList
+		console.log(songList);
 
-	// Loop through needed data (songs) & push to array
-	$('#songslist tr').each((i, elem) => {
-		const songId = $(elem).attr('id');  // get ID of each song
-
-		songList.push(songId);  // add songId to arrayOfSongIds array
-	})
+		
+	} else {
+		console.error("Error from function:", result.error);
+	}
 }
 
 async function getLyrics() {

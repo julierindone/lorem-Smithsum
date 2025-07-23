@@ -1,7 +1,7 @@
 import { load } from 'cheerio';
 import fetch from 'node-fetch';
 
-export async function handler (event, context) {
+export async function handler () {
 	try {
 		const songListUrl = 'https://songmeanings.com/artist/view/songs/464/'
 
@@ -40,7 +40,7 @@ export async function handler (event, context) {
 				"Access-Control-Allow-Origin": "*",
 				"Access-Control-Allow-Headers": "Content-Type"
 			},
-			body: JSON.stringify({ error: "Failed to scrape data." })
+			body: JSON.stringify({ error: "getSongs failed to scrape data." })
 		};
 	}
 }

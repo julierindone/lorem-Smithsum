@@ -1,7 +1,7 @@
-const cheerio = require('cheerio');
-const fetch = require('node-fetch');
+import { load } from 'cheerio';
+import fetch from 'node-fetch';
 
-exports.handler = async function (event, context) {
+export async function handler (event, context) {
 	try {
 		const songListUrl = 'https://songmeanings.com/artist/view/songs/464/'
 
@@ -10,7 +10,7 @@ exports.handler = async function (event, context) {
 		const rawHtml = await response.text();
 		const songList = []
 
-		const $ = cheerio.load(rawHtml)
+		const $ = load(rawHtml)
 		
 		$('#songslist tr').each((i, elem) => {
 			const songId = $(elem).attr('id');
@@ -45,4 +45,4 @@ exports.handler = async function (event, context) {
 			body: JSON.stringify({ error: "Failed to scrape data." })
 		};
 	}
-};
+}

@@ -1,18 +1,25 @@
 {
-  "name": "functions",
+  "name": "lorem-smithsum",
   "version": "1.0.0",
   "type": "module",
-  "main": "get-songs.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "description": "A lorem ipsum generator, but it's human and it needs to be loved.",
   "dependencies": {
+    "@netlify/functions": "^2.8.2",
     "cheerio": "^1.1.2",
     "node-fetch": "^3.3.2"
   },
-  "devDependencies": {},
-  "description": ""
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/julierindone/lorem-Smithsum.git"
+  },
+  "keywords": ["netlify"],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/julierindone/lorem-Smithsum/issues"
+  },
+  "homepage": "https://github.com/julierindone/lorem-Smithsum#readme"
 }

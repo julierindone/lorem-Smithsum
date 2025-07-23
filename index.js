@@ -90,15 +90,14 @@ function copyLyricsToClipboard() {
 
 async function getSongList() {
 	const response = await fetch('/.netlify/functions/getSongs')
+
+	// get array of song IDs from function
 	const result = await response.json()
 	if (response.ok) {
-		// console.log("scrapedData.songList[1]:" + result.scrapedData.songList[1])
-		// Do something with it
-		songList = result.scrapedData.songList
+		songList = result.songList
 		console.log(`Response was ok! Song IDs:`);
 		console.log(songList);
 
-		
 	} else {
 		console.error("Error from function:", result.error);
 	}

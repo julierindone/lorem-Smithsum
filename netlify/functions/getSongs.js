@@ -12,16 +12,14 @@ export async function handler (event, context) {
 
 		const $ = load(rawHtml)
 		
+		// get song IDs from rows with songslist class & push to array
 		$('#songslist tr').each((i, elem) => {
 			const songId = $(elem).attr('id');
 
 			songList.push(songId)
 		})
 
-		const scrapedContent = {
-			songList: songList
-		}
-
+		// Add Access Control to headers & return songList array
 		return {
 			statusCode: 200,
 			headers: {
@@ -30,7 +28,7 @@ export async function handler (event, context) {
 			},
 			body: JSON.stringify({
 				message: "Data scraped successfully!",
-				scrapedData: scrapedContent
+				songList: songList
 			})
 		}
 	}

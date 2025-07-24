@@ -79,12 +79,27 @@ main {
 footer {
 	margin-top: 0.5rem;
 	text-align: center;
+	opacity: .6;
 	p {
 		display: inline-block;
-		font-size: .9rem;
-		margin: .5rem;
-		opacity: .82;
+		font-size: .85rem;
+		margin: .7rem 2rem;
+		max-width: 70%;
 	}
+	hr {
+		border: none;
+		border-top: 1px solid var(--white);
+		margin: 0 auto;
+	}
+}
+
+.footer-top-line {
+	width: 80%;
+	margin: auto;
+}
+.footer-bottom-line {
+	margin-top: 5px;
+	width: 76%;
 }
 
 .word-count-input-container {
@@ -270,6 +285,29 @@ span.line {
 	.lyrics-box p {
 		line-height: 1.5;
 	}
+	footer {
+		margin: .8rem auto 0.25rem auto;
+		p {
+			font-size: .85rem;
+			line-height: 1.42;
+			max-width: 70%;
+			margin: .55rem 1rem .45rem 1rem;
+		}
+		hr {
+			border: none;
+			border-top: 1px solid var(--white);
+			margin: 0 auto;
+		}
+	}
+
+	.footer-top-line {
+		width: 80%;
+		margin: auto;
+	}
+	.footer-bottom-line {
+		margin-top: 4px;
+		width: 76%;
+	}
 }
 
 /* ===================== SMALLER PHONE ==================== */
@@ -287,5 +325,18 @@ span.line {
 	main {
 		margin-left: .5rem;
 		margin-right: .5rem;
+	}
+	footer p {
+		font-size: .8rem;
+		max-width: 85%;
+		margin-bottom: .32rem;
+	}
+		.footer-top-line {
+		width: 92%;
+		margin: auto;
+	}
+	.footer-bottom-line {
+		margin-top: 4px;
+		width: 90%;
 	}
 }

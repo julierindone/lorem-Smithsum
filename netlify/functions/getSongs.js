@@ -11,7 +11,7 @@ export async function handler () {
 		const songList = []
 
 		const $ = load(rawHtml)
-		
+
 		// get song IDs from rows with songslist class & push to array
 		$('#songslist tr').each((i, elem) => {
 			const songId = $(elem).attr('id');

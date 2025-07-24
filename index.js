@@ -1,5 +1,3 @@
-import { load } from 'https://cdn.jsdelivr.net/npm/cheerio@1.1.0/+esm'
-
 const wordCountInputEl = document.getElementById('word-count-input')
 const generateSmithsumBtnEl = document.getElementById('generate-smithsum-btn')
 const lyricsBoxEl = document.getElementById('lyrics-box')
@@ -41,13 +39,13 @@ async function generateLoremSmithsum() {
 	try {
 		resetLyrics() // reset word count and clears previously set of lyrics
 
-		// do {
+		do {
 			await getLyrics()  // get lyrics from source
-		// 	formatLyrics()  // format for display
-		// }
-		// while (numWordsToGet > songWordCount);
+			formatLyrics()  // format for display
+		}
+		while (numWordsToGet > songWordCount);
 
-		// displayLyrics()  // display final lyrics in UI
+		displayLyrics()  // display final lyrics in UI
 	}
 	catch (err) {
 		console.log(err)
@@ -113,16 +111,14 @@ async function getLyrics() {
 		songTitle = result.songTitle
 		rawLyrics = result.rawLyrics
 		console.log(`fetchLyrics response ok`);
-		console.log(`rawLyrics:\n ${rawLyrics}`);
-		console.log(`songTitle:\n ${songTitle}`);
 	} else {
 		console.error("Error from fetchLyrics function:", result.error)
 	}
 
 	// TODO: Would be more efficient for this to be checked and re-called in the server function, but get it working first.
-	// if (rawLyrics.length < 50) {  //  filter out instrumentals
-	// 	await getLyrics()  // call getLyrics() again.
-	// }
+	if (rawLyrics.length < 50) {  //  filter out instrumentals
+		await getLyrics()  // call getLyrics() again.
+	}
 }
 
 function pickSongId() {

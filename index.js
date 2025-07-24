@@ -12,6 +12,7 @@ let songList = []
 let songToGet = ''
 let songWordCount = ''
 let rawLyrics = ''
+let songTitle = ''
 
 // Get list of all songs by the Smiths as soon as the page loads
 document.addEventListener("DOMContentLoaded", async () => {
@@ -41,7 +42,7 @@ async function generateLoremSmithsum() {
 		resetLyrics() // reset word count and clears previously set of lyrics
 
 		// do {
-		// 	await getLyrics()  // get lyrics from source
+			await getLyrics()  // get lyrics from source
 		// 	formatLyrics()  // format for display
 		// }
 		// while (numWordsToGet > songWordCount);
@@ -91,13 +92,11 @@ function copyLyricsToClipboard() {
 async function getSongList() {
 	const response = await fetch('/.netlify/functions/getSongs')
 
-	// get array of song IDs from function
+	// get array of IDs (songList) from getSongs server function
 	const result = await response.json()
 	if (response.ok) {
 		songList = result.songList
-		console.log(`Response was ok! Song IDs:`);
-		console.log(songList);
-
+		console.log(`songList response ok`);
 	} else {
 		console.error("Error from function:", result.error);
 	}
@@ -106,13 +105,24 @@ async function getSongList() {
 async function getLyrics() {
 	songToGet = pickSongId()  // Get random songId from list
 	const songUrl = `https://songmeanings.com/songs/view/${songToGet}/`
-	const { data } = await axios.get(songUrl) //  get data from axios
-	const $ = load(data) // load data into cheerio
-	rawLyrics = $('div.none').html() //convert into usable text	
 
-	if (rawLyrics.length < 50) {  //  filter out instrumentals
-		await getLyrics()  // call getLyrics() again.
+	// get raw string of songToGet's lyrics
+	const response = await fetch(`/.netlify/functions/fetchLyrics?songUrl=${songUrl}`)
+	const result = await response.json()
+	if (response.ok) {
+		songTitle = result.songTitle
+		rawLyrics = result.rawLyrics
+		console.log(`fetchLyrics response ok`);
+		console.log(`rawLyrics:\n ${rawLyrics}`);
+		console.log(`songTitle:\n ${songTitle}`);
+	} else {
+		console.error("Error from fetchLyrics function:", result.error)
 	}
+
+	// TODO: Would be more efficient for this to be checked and re-called in the server function, but get it working first.
+	// if (rawLyrics.length < 50) {  //  filter out instrumentals
+	// 	await getLyrics()  // call getLyrics() again.
+	// }
 }
 
 function pickSongId() {

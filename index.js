@@ -15,6 +15,10 @@ let songTitle = ''
 // Get list of all songs by the Smiths as soon as the page loads
 document.addEventListener("DOMContentLoaded", async () => {
 	await getSongList();
+	const headerHeight = document.getElementById("header").offsetHeight;
+	const footerHeight = document.getElementById("footer").offsetHeight;
+	document.documentElement.style.setProperty('--header-height', `${headerHeight}px`)
+	document.documentElement.style.setProperty('--footer-height', `${footerHeight}px`)
 })
 
 // Clear input and related error messages upon focus on word count input box 

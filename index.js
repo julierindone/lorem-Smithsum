@@ -66,9 +66,8 @@ function clearInput() {
 }
 
 function displayLyrics() {
-	// display lyricsWrapper box
-	lyricsBoxEl.classList.replace('hidden-element', 'lyrics-box')
-	copyBtnEl.classList.replace('hidden-element', 'copy-btn')
+	lyricsBoxEl.style.display = "unset";
+	copyBtnEl.style.display = "unset";
 
 	const lyricsEl = document.createElement("p")  // create lyrics element
 	lyricsEl.id = 'lyrics-el'

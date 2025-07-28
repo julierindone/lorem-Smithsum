@@ -162,10 +162,11 @@ button {
 	margin-top: .05rem;
 }
 
-.copy-btn {
+#copy-btn {
 	align-self: flex-end;
-	margin-top: .9rem;
 	width: 8rem;
+	display: none;
+	margin: .55rem .18rem .18rem 0;
 }
 
 @media (hover: hover) {
@@ -198,19 +199,15 @@ button:active {
 #lyrics-box {
 	opacity: .8;
 	overflow-y: auto;
-}
-
-#lyrics-box p {
 	background-color: var(--white);
-	color: var(--dark-ice-blue);
-	line-height: 1.5;
-	margin: 0;
-	padding: 1.25% 1.75%;
-	min-height: 10rem;
-}
+	border-block: solid .75em var(--white);
 
-.hidden-element {
-	display: none;
+	p {
+		color: var(--dark-ice-blue);
+		line-height: 1.5;
+		margin: 0;
+		padding-inline: .75rem;
+	}
 }
 
 span.line {
@@ -273,7 +270,7 @@ span.line {
 		margin-top: .4rem;
 	}
 
-	.lyrics-box {
+	#lyrics-box {
 		scrollbar-width: none;  /* Firefox */
 		-ms-overflow-style: none;  /* IE and Edge */
 	}

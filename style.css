@@ -197,6 +197,7 @@ button:active {
 
 /* TODO: Add a smoother transition when displaying the lyrics. */
 #lyrics-box {
+	display: none;
 	opacity: .8;
 	overflow-y: auto;
 	background-color: var(--white);

@@ -1,12 +1,14 @@
-/* Screen width: 1251px - 1999px */
+/* TODO: Breakpoints are weird, could be simplified and/or made more resposive */
 
 :root {
 	--white: #fbfbfb;
 	--dark-gray: #2f2f2f;
 	--ice-blue: #78a2b0;
 	--trans-ice-blue: #78a2b0a1;
-	--dark-ice-blue: #448094; 
+	--dark-ice-blue: #448094;
 }
+
+/* Base sizing: (min-width:881px) and (max-width:1250px) */
 
 .bodoni-moda-sc {
 	font-family: "Bodoni Moda SC", serif;
@@ -20,14 +22,13 @@ body, html {
 	color: var(--white);
 	margin: 0;
 	height: 100%;
-}	
+}
 
 #wrapper {
 	margin: 0 auto;
 	display: flex;
 	flex-direction: column;
 	height: 100dvh;
-	max-width:1300px;
 }
 
 .rocker-boys {
@@ -47,8 +48,9 @@ body, html {
 	align-items: center;
 	justify-content: center;
 	margin-top: 4%;
-	padding: 1.5%;
-}	
+	/* TODO: Convert to em? */
+	padding: 1.5% 1.75rem;
+}
 
 h1 {
 	font-size: 4.0rem;
@@ -57,22 +59,20 @@ h1 {
 	-webkit-text-stroke-color: var(--white);
 	line-height: 1.2;
 	opacity: .9;
-}	
+}
 
 main {
 	display: flex;
 	flex-direction: column;
-	flex-grow: 1; 
+	flex-grow: 1;
 	overflow-y: auto;
-	margin-left: 1.75rem;
-	margin-right: 1.75rem;
-	max-height: calc(100dvh - (var(--header-height) + var(--footer-height)));
+	margin-inline: 1.75rem;
 }
 
 .lyrics-container {
 	display: flex;
 	flex-direction: column;
-	flex-grow: 1; 
+	flex-grow: 1;
 	overflow-y: auto;
 	margin-top: .9rem;
 }
@@ -80,7 +80,8 @@ main {
 footer {
 	margin-top: 1.2rem;
 	text-align: center;
-	opacity: .6;
+	opacity: .7;
+
 	p {
 		display: inline-block;
 		font-size: .85rem;
@@ -98,6 +99,7 @@ footer {
 	width: 80%;
 	margin: auto;
 }
+
 .footer-bottom-line {
 	margin-top: 5px;
 	width: 76%;
@@ -108,7 +110,7 @@ footer {
 	justify-items: center;
 	align-items: center;
 	column-gap: 1.4rem;
-	align-content:center;
+	align-content: center;
 	margin-top: .8rem;
 	padding: .018rem 0; /* WATCH: what is the purpose of this padding? */
 }
@@ -123,25 +125,25 @@ label {
 }
 
 #word-count-input {
-  color: var(--dark-ice-blue);
+	color: var(--dark-ice-blue);
 	text-align: center;
 	width: 4rem;
 	opacity: .75;
 	box-sizing: border-box;
-  margin-left: .2rem;
+	margin-left: .2rem;
 }
 
 #word-count-input:focus {
-	opacity: .80;
+	opacity: .8;
 }
 
 ::placeholder {
 	color: var(--ice-blue);
-	opacity: .75;
+	opacity: .65;
 }
 
 :focus::placeholder {
-	opacity: .50;
+	opacity: .5;
 }
 
 button {
@@ -153,7 +155,7 @@ button {
 	border: 1px solid #58828f;
 	box-shadow: 3px 3px #578390ed;
 	padding: .04rem .62rem .18rem .62rem !important;
-	-webkit-text-stroke-width: .05px;
+	-webkit-text-stroke-width: .2px;
 	-webkit-text-stroke-color: var(--white);
 }
 
@@ -182,16 +184,16 @@ button:active {
 	box-shadow: 2px 2px #3f626c;
 	transform: translateY(2px) translateX(2px);
 }
-	
+
 #error-message p {
-	font-size: 1rem;
-	color: #ff6b80;
+	font-size: 1.02rem;
+	color: #ff5d75;
 	text-shadow: 0 0 .75px black;
-	background: #4b4a4ab0;
+	background: #3e3e3eb0;
 	display: inline-block;
-	margin-top:.8rem;
+	margin-top: .8rem;
 	margin-bottom: 0;
-	padding: .05rem .05rem .05rem 0;
+	padding: .06rem .05rem .06rem 0;
 	border-radius: 2px;
 }
 
@@ -220,28 +222,42 @@ span.line {
 /* ================= MEDIA QUERIES ================= */
 /* ================================================= */
 
+/* ===================== DESKTOP =================== */
+@media (min-width:1251px) {
+	html {
+		font-size: 18px;
+	}
+	h1 {
+		font-size: 4.6rem;
+	}
+
+	.color-band {
+		padding-inline: 3rem;
+	}
+	main {
+		margin-inline: 3rem;
+	}
+}
 
 /* ===================== TABLET ==================== */
-
 @media (min-width:625px) and (max-width:880px) {
 	h1 {
 		font-size: 3.2rem;
 	}
-	main {
-		margin-left: 1.75rem;
-		margin-right: 1.75rem;
-}
 }
 
 /* ===================== PHONE ==================== */
-
 @media (max-width:625px) {
 	html {
 		overflow: scroll;
 	}
 
+	.color-band {
+		padding: .65rem 1rem;
+	}
+
 	h1 {
-		font-size: 3.2rem;
+		font-size: 3.1rem;
 	}
 
 	.rocker-boys {
@@ -249,48 +265,37 @@ span.line {
 	}
 
 	main {
-		margin-left: 1rem;
-		margin-right: 1rem;
+		margin-inline: 1rem;
 	}
-	
+
 	.word-count-input-container {
 		align-items: unset;
 		flex-direction: column;
 		width: max-content;
-	}
-
-	.word-count-input-container > * > * {
-		font-size: 1.05rem;
-	}
-
-	button {
-		font-size: .9rem;
-	}
+	} 
 
 	#generate-smithsum-btn {
-		margin-top: .4rem;
+		margin-top: .65rem;
 	}
 
 	#lyrics-box {
 		scrollbar-width: none;  /* Firefox */
 		-ms-overflow-style: none;  /* IE and Edge */
+		p {
+			line-height: 1.5;
+			min-height: unset;
+		}
 	}
+		#lyrics-box::--webkit-scrollbar {  /* Chrome */
+			width: 0;
+			background: transparent;
+		}
 
-	.lyrics-box::--webkit-scrollbar {  /* Chrome */
-		width: 0;
-		background: transparent;
-	}
-
-	.lyrics-box p {
-		line-height: 1.5;
-		min-height: unset;
-	}
 	footer {
 		margin: .8rem auto 0.25rem auto;
 		p {
-			font-size: .85rem;
+			font-size: .9rem;
 			line-height: 1.42;
-			max-width: 70%;
 			margin: .55rem 1rem .45rem 1rem;
 		}
 		hr {
@@ -304,6 +309,7 @@ span.line {
 		width: 80%;
 		margin: auto;
 	}
+
 	.footer-bottom-line {
 		margin-top: 4px;
 		width: 76%;
@@ -311,30 +317,46 @@ span.line {
 }
 
 /* ===================== SMALLER PHONE ==================== */
-@media (min-width:381px) and (max-width:430px){
+@media (min-width:381px) and (max-width:430px) {
 	h1 {
 		font-size: 2.9rem;
 	}
 }
+
 /* ===================== TINY PHONE ==================== */
-@media (max-width:380px){
+@media (max-width:360px) {
+/* @media (max-width:380px) { */
+	.color-band {
+		padding-inline: .5rem;
+	}
+
 	h1 {
-		font-size: 2.5rem;
-		margin-left: .2rem;
+		font-size: 2.3rem;
 	}
+
 	main {
-		margin-left: .5rem;
-		margin-right: .5rem;
+		margin-inline: .5rem;
 	}
+
+	#lyrics-box {
+		border-block: solid .5em var(--white);
+
+		p {
+			padding-inline: .5rem;
+		}
+	}
+
 	footer p {
 		font-size: .8rem;
 		max-width: 85%;
-		margin-bottom: .32rem;
+		/* margin-bottom: .32rem; /////// REMOVE (I think) */
 	}
-		.footer-top-line {
+
+	.footer-top-line {
 		width: 92%;
 		margin: auto;
 	}
+
 	.footer-bottom-line {
 		margin-top: 4px;
 		width: 90%;

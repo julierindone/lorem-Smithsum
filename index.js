@@ -1,3 +1,4 @@
+const wordCountForm = document.getElementById('word-count-form')
 const wordCountInputEl = document.getElementById('word-count-input')
 const generateSmithsumBtnEl = document.getElementById('generate-smithsum-btn')
 const lyricsBoxEl = document.getElementById('lyrics-box')
@@ -22,7 +23,8 @@ wordCountInputEl.addEventListener('focus', () => {
 	clearInput()
 })
 
-generateSmithsumBtnEl.addEventListener('click', () => {
+wordCountForm.addEventListener('submit', (event) => {
+	event.preventDefault()
 	numWordsToGet = getWordCountInputEl()
 	// if there are non-digits, too many words, or the number is 0...
 	if (/\D/.test(numWordsToGet) || numWordsToGet > 5000 || numWordsToGet === 0) {

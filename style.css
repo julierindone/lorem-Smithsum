@@ -16,7 +16,6 @@
 }
 
 body, html {
-	font-size: 16px;
 	font-family: futura, Roboto, 'Open Sans', 'Helvetica Neue', sans-serif;
 	background-color: var(--dark-gray);
 	color: var(--white);
@@ -203,7 +202,9 @@ button:active {
 	opacity: .8;
 	overflow-y: auto;
 	background-color: var(--white);
-	border-block: solid .75em var(--white);
+	border-block: solid .5rem var(--white);
+	/* Hacky fix for weird issue with corners. Remove if it's making things worse! Should obly be needed for 625pc since i think it has something to do with the scrollbar. */
+	border-inline: solid 1px #00000000;
 
 	p {
 		color: var(--dark-ice-blue);
@@ -283,7 +284,6 @@ span.line {
 		-ms-overflow-style: none;  /* IE and Edge */
 		p {
 			line-height: 1.5;
-			min-height: unset;
 		}
 	}
 		#lyrics-box::--webkit-scrollbar {  /* Chrome */
@@ -336,11 +336,8 @@ span.line {
 		margin-inline: .5rem;
 	}
 
-	#lyrics-box {
-		border-block: solid .5em var(--white);
-		p {
-			padding-inline: .5rem;
-		}
+	#lyrics-box p {
+		padding-inline: .5rem;
 	}
 
 	footer p {

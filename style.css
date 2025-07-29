@@ -317,21 +317,19 @@ span.line {
 }
 
 /* ===================== SMALLER PHONE ==================== */
-@media (min-width:381px) and (max-width:430px) {
+@media (min-width:391px) and (max-width:430px) {
 	h1 {
 		font-size: 2.9rem;
 	}
 }
 
 /* ===================== TINY PHONE ==================== */
-@media (max-width:360px) {
-/* @media (max-width:380px) { */
+@media (max-width:390.99px) {
 	.color-band {
 		padding-inline: .5rem;
 	}
-
 	h1 {
-		font-size: 2.3rem;
+		font-size: 2.4rem;
 	}
 
 	main {
@@ -340,7 +338,6 @@ span.line {
 
 	#lyrics-box {
 		border-block: solid .5em var(--white);
-
 		p {
 			padding-inline: .5rem;
 		}
@@ -349,7 +346,7 @@ span.line {
 	footer p {
 		font-size: .8rem;
 		max-width: 85%;
-		/* margin-bottom: .32rem; /////// REMOVE (I think) */
+		margin-bottom: .15rem;
 	}
 
 	.footer-top-line {

@@ -139,7 +139,8 @@ function formatLyrics() {
 }
 
 function resetLyrics() {
-	songWordCount = 0
+	songWordCount = 0;
+	lyrics = '';
 	lyricsBoxEl.style.display = "none";
 	copyBtnEl.style.display = "none";
 }

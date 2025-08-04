@@ -5,7 +5,7 @@
 	--dark-gray: #2f2f2f;
 	--ice-blue: #78a2b0;
 	--trans-ice-blue: #78a2b0a1;
-	--dark-ice-blue: #448094;
+	--dark-ice-blue: #397487;
 }
 
 /* Base sizing: (min-width:881px) and (max-width:1250px) */
@@ -220,7 +220,7 @@ span.line {
 }
 
 #lyrics-el p {
-	margin-bottom: .6em;
+	margin-bottom: .7em;
 }
 
 /* ================================================= */

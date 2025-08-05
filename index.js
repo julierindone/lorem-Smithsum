@@ -74,7 +74,8 @@ function displayLyrics() {
 	const lyricsEl = document.createElement("div")  // create lyrics element
 	lyricsEl.id = 'lyrics-el'
 
-	lyricsEl.innerHTML = `${lyrics}</p>`  // insert content; add ending p tag
+	let completeLyrics = lyrics.replace(/([:;,"'!?]*)$/, '...</p>')  // insert content; add ending p tag
+	lyricsEl.innerHTML = completeLyrics
 
 	// remove lyrics generated from a previous button click
 	document.getElementById('lyrics-el') ? lyricsBoxEl.removeChild(lyricsEl) : null
@@ -144,7 +145,7 @@ function formatLyrics() {
 	const lineNeedsComma = /([:;.,"'!?]*)\*?\*\s*/g // Line needs punctuation 
 	const reorderPunctuation = /(["'])([:;.,!,!?])/g
 	const endTags = /\<(p|br)\>$/g
-	const decapitalize = /,\s*([[A-Z]--I])/vg
+	const decapitalize = /([,']+)\s*([A-Z]{1}[a-z])/g
 	let paragraphs = []
 
 	//  1: Get rid of any music symbols & blank lines at start
@@ -157,22 +158,31 @@ function formatLyrics() {
 	let noDivs = junkRemoval.replace(verseChorusVerse, '@@@').split('@@@')
 	let newPara = ''
 	let paraLength = 2
+	// switch back and forth between creating 2-sentence and 3-sentence paragraphs
+	if (noDivs.length > 1) // prevents song from going through loop if there aren't separate verses
 	do {
 		if (paraLength === 2) {
 			newPara = noDivs[0] + '* ' + noDivs[1] + '%</p><p>'
 			noDivs.splice(0, 2)
 			paraLength = 3
+				paragraphs.push(newPara)
 		}
-		else {
+			else if (paraLength === 3) {
 			newPara = noDivs[0] + '* ' + noDivs[1] + '* ' + noDivs[2] + '%</p><p>'
 			noDivs.splice(0, 3)
 			// console.log("paraLength = 3. NewPara:\n" + newPara)
 			paraLength = 2
-		}
 		paragraphs.push(newPara)
-	} while (noDivs.length > 4)
+			}
+		}
+		while (noDivs.length > 2)
+	console.log(`out of loop! noDivs.length is ${noDivs.length}`);
+
+
+	if (noDivs.length === 1) {
 	let lastPara = noDivs.join('* ') + '%</p><p>'
 	paragraphs.push(lastPara)
+	}
 
 	// console.log(`paragraphs: \n${paragraphs}\n-------------------\n`);
 
@@ -185,7 +195,7 @@ function formatLyrics() {
 	// console.log(`crudeFormatting: \n ${crudeFormatting} \n-------------------\n`);
 
 	// 4b: Refine formatting: reorder backwards punctuation, fix casing after commas, Remove unneeded tags at end
-	let formattedLyrics = crudeFormatting.replace(reorderPunctuation, "$2$1").replace(endTags, '').replace(decapitalize, (match, c1) => { return `, ${c1.toLowerCase()}` })
+	let formattedLyrics = crudeFormatting.replace(reorderPunctuation, "$2$1").replace(endTags, '').replace(decapitalize, (match, c1, c2) => { return `${c1} ${c2.toLowerCase()}` })
 
 	// 5. Cut off formattedLyrics at desired # of words
 	let formattedLyricsArray = formattedLyrics.split(' ');

@@ -131,35 +131,41 @@ function pickSongId() {
 function formatLyrics() {
 	console.log(`\nsongTitle: ${songTitle}\n rawLyrics: \n${rawLyrics}\n-------------------\n`)
 
-	// TODO: SIMPLIFY THIS ENTIRE FUMCTION.
+	// TODO: SIMPLIFY THIS ENTIRE FUMCTION, and probably break out paragraphFormatting and lineFormatting into separate functions
 
-	const musicNoteFix = /\s*\(♫\)|\(&#127925;\)|\(&#x266B;\)|\(&#9835;\)\s*/g
-	const extraSpaceRemoval = /\s(\<|"?[:?.,!]+)/g // Removes extra spaces before tags and punctuation
-	const startTags = /^\s*<.[^>]*>/
+	const musicNoteFix = /\s*\(♫\)|\(&#x266B;\)|\(&#9835;\)\s*/g  // Remove music notes
+	const extraSpaceRemoval = /\s(\<|"?[:?.,!]+)/g // Remove extra spaces before tags and punctuation
+	const removeStartTags = /^\s*<.[^>]*>/  // Remove any tags or spaces found at start
 	const verseChorusVerse = /(<br><div class="empty-line"><br><\/div>)(<br>)?(<div class="empty-line"><br><\/div>)?/g
-	const breakTag = /\<br\/?\>\s*/g
-	const paraEndComma = /,\*?\s?%\s*/g
-	const paraEndPunctuation = /([:;.,"'!?]+)\*?\s?%\s*/g
-	const paraNeedsPeriod = /([:;.,"'!?]*)\*?\s?%\s*/g // Para needs end punctuation
-	const linePunctuation = /([:;.,"'!?]+)\*?\*\s*/g
-	const lineNeedsComma = /([:;.,"'!?]*)\*?\*\s*/g // Line needs punctuation 
-	const reorderPunctuation = /(["'])([:;.,!,!?])/g
-	const endTags = /\<(p|br)\>$/g
-	const decapitalize = /([,']+)\s*([A-Z]{1}[a-z])/g
+	// Remove string of tags creating verse breaks
+	const breakTag = /\<br\/?\>\s*/g  //
+
+	// Format ends of paragraphs
+	const removeStarFromParaEnd = /\*\s(%)/g  // Removes stars, leaves percents
+	const paraEndCommaToPeriod = /\s?,("?)%/g  // Change commas at ends of paras to periods
+	const paraEndPunctuation = /\s?([:;.!?]+)(["']?)%\s*/g  //Clear spaces etc from ends of paragraphs with other punctuation
+	const paraNeedsPeriod = /(?<![.!?"'])(["']?)%/g  // If no other punctuation, add period.
+
+	// Format sentences
+	const linePunctuation = /(["']?[:;.,!?]+['"]?)\*\s*/g  // Trim stars and spacing from lines with punctuation.
+	const lineNeedsComma = /(?<![:;.,"'!?"'])(["']?)\*?\*\s*/g  // Trim stars & adds commas to lines needing punctuation 	// TODO try deleting the second star.
+	const reorderPunctuation = /(["'])([:;.,!,!?])/g  // Flip backwards quotes/punctuation marks
+	const decapitalize = /([,']+)\s([A-Z]{1}[a-z])/g  // Decapitalize words after commas
+	const removeEndTags = /\<(p|br)\>$/g  // Removes extra break or p tags after last paragraph
 	let paragraphs = []
 
 	//  1: Get rid of any music symbols & blank lines at start
 	let junkRemoval = rawLyrics.replace(extraSpaceRemoval, '$1').replace(musicNoteFix, '');
 	do {
-		junkRemoval = junkRemoval.replace(startTags, '');
-	} while (startTags.test(junkRemoval));
+		junkRemoval = junkRemoval.replace(removeStartTags, '');
+	} while (removeStartTags.test(junkRemoval));
 
 	// 2. Split between verses, then format into paragraphs of varying sizes
-	let noDivs = junkRemoval.replace(verseChorusVerse, '@@@').split('@@@')
+	let noDivs = junkRemoval.replace(verseChorusVerse, '@').split('@')
 	let newPara = ''
 	let paraLength = 2
 	// switch back and forth between creating 2-sentence and 3-sentence paragraphs
-	if (noDivs.length > 1) // prevents song from going through loop if there aren't separate verses
+	if (noDivs.length > 1) {   // prevents song from going through loop if there aren't separate verses
 	do {
 		if (paraLength === 2) {
 			newPara = noDivs[0] + '* ' + noDivs[1] + '%</p><p>'
@@ -170,49 +176,43 @@ function formatLyrics() {
 			else if (paraLength === 3) {
 			newPara = noDivs[0] + '* ' + noDivs[1] + '* ' + noDivs[2] + '%</p><p>'
 			noDivs.splice(0, 3)
-			// console.log("paraLength = 3. NewPara:\n" + newPara)
 			paraLength = 2
 		paragraphs.push(newPara)
 			}
 		}
-		while (noDivs.length > 2)
-	console.log(`out of loop! noDivs.length is ${noDivs.length}`);
+		while (noDivs.length > 3)
+	}
+	if (noDivs.length >= 1) {
 
-
-	if (noDivs.length === 1) {
 	let lastPara = noDivs.join('* ') + '%</p><p>'
 	paragraphs.push(lastPara)
 	}
 
-	// console.log(`paragraphs: \n${paragraphs}\n-------------------\n`);
-
 	// 3. Replace single line break tags temporarily with a *
 	let noBreakTags = paragraphs.join('').replace(breakTag, '* ');
-	// console.log(`noBreakTags: \n ${noBreakTags} \n-------------------\n`);
 
-	// 4a. Add/replace punctuation where needed	
-	let crudeFormatting = noBreakTags.replace(paraEndComma, '.').replace(paraEndPunctuation, '$1').replace(paraNeedsPeriod, '.').replace(linePunctuation, '$1 ').replace(lineNeedsComma, ', ')
-	// console.log(`crudeFormatting: \n ${crudeFormatting} \n-------------------\n`);
+	// 4a. Format paragraphs
+	let paragraphFormatting = noBreakTags.replace(removeStarFromParaEnd, "$1").replace(paraEndCommaToPeriod, ".$1").replace(paraEndPunctuation, '$1$2').replace(paraNeedsPeriod, ".$1")
+
+	let lineFormatting = paragraphFormatting.replace(linePunctuation, '$1 ').replace(lineNeedsComma, ',$1 ').replace(reorderPunctuation, "$2$1").replace(decapitalize, (match, c1, c2) => { return `${c1} ${c2.toLowerCase()}` });
 
 	// 4b: Refine formatting: reorder backwards punctuation, fix casing after commas, Remove unneeded tags at end
-	let formattedLyrics = crudeFormatting.replace(reorderPunctuation, "$2$1").replace(endTags, '').replace(decapitalize, (match, c1, c2) => { return `${c1} ${c2.toLowerCase()}` })
+	let formattedLyrics = lineFormatting.replace(removeEndTags, '');
 
 	// 5. Cut off formattedLyrics at desired # of words
 	let formattedLyricsArray = formattedLyrics.split(' ');
 
-	// console.log(`numWordsToGet: ${numWordsToGet}\nsongWordCount: ${songWordCount}\nDifference: ${numWordsToGet - songWordCount}`);
-
-	if ((numWordsToGet - songWordCount) < formattedLyricsArray.length) {
+	let wordsStillNeeded = numWordsToGet - songWordCount
+	if (wordsStillNeeded <= formattedLyricsArray.length - 10) {
 		// If fewer words than are in song are still needed, slice the words to meet that need.
 		console.log(`numWordsToGet: ${numWordsToGet}\nsongWordCount: ${songWordCount}\nDifference: ${numWordsToGet - songWordCount}`);
-		formattedLyricsArray = formattedLyricsArray.slice(0, numWordsToGet - songWordCount);
+		formattedLyricsArray = formattedLyricsArray.slice(0, wordsStillNeeded);
 	}
 	songWordCount += formattedLyricsArray.length;
 	console.log(`songWordCount is now ${songWordCount}\n`);
 
-	// 6. Add final paragraph tags
+	// 6. Add tag to first paragraph
 	lyrics += `<p>${formattedLyricsArray.join(' ')}`;
-	console.log(`lyrics: \n ${lyrics} \n-------------------\n`);
 }
 
 function resetLyrics() {

@@ -67,19 +67,26 @@ function clearInput() {
 	wordCountInputEl.value = ''
 }
 
+// Do last bits of formatting on entire lyrics string. 
+function assembleLyrics() {
+	let endPunctuation = /([:;,!?]*)(["'])?$/
+	let needsCapitalLetter = /(\<p\>)(\.{3,})?\s?([a-z])/g
+
+	// Add ending p tag and end punctuation to last sentence if needed. Ensure all paragraphs start with a capital letter.
+	lyrics = lyrics.replace(endPunctuation, '...</p>').replace(needsCapitalLetter, (match, c1, c2, c3) => {
+		return `${c1}${c2}${c3.toUpperCase}`
+	})
+	return lyrics
+}
+
 function displayLyrics() {
 	lyricsBoxEl.style.display = "unset";
 	copyBtnEl.style.display = "unset";
 
 	const lyricsEl = document.createElement("div")  // create lyrics element
 	lyricsEl.id = 'lyrics-el'
-
-	let completeLyrics = lyrics.replace(/([:;,"'!?]*)$/, '...</p>')  // insert content; add ending p tag
-	lyricsEl.innerHTML = completeLyrics
-
-	// remove lyrics generated from a previous button click
-	document.getElementById('lyrics-el') ? lyricsBoxEl.removeChild(lyricsEl) : null
-
+	lyricsEl.innerHTML = assembleLyrics();
+	document.getElementById('lyrics-el') ? lyricsBoxEl.removeChild(lyricsEl) : null  // remove previously generated lyrics
 	lyricsBoxEl.appendChild(lyricsEl)  // add element to the div
 }
 

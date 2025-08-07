@@ -135,17 +135,14 @@ function pickSongId() {
 	return (songList[indexToGet]).substring(6)
 }
 
+// TODO: SIMPLIFY THIS ENTIRE FUNCTION, and probably break out paragraphFormatting and lineFormatting into separate functions
 function formatLyrics() {
-	console.log(`\nsongTitle: ${songTitle}\n rawLyrics: \n${rawLyrics}\n-------------------\n`)
-
-	// TODO: SIMPLIFY THIS ENTIRE FUMCTION, and probably break out paragraphFormatting and lineFormatting into separate functions
-
 	const musicNoteFix = /\s*\(♫\)|\(&#x266B;\)|\(&#9835;\)\s*/g  // Remove music notes
 	const extraSpaceRemoval = /\s(\<|"?[:?.,!]+)/g // Remove extra spaces before tags and punctuation
 	const removeStartTags = /^\s*<.[^>]*>/  // Remove any tags or spaces found at start
 	const verseChorusVerse = /(<br><div class="empty-line"><br><\/div>)(<br>)?(<div class="empty-line"><br><\/div>)?/g
 	// Remove string of tags creating verse breaks
-	const breakTag = /\<br\/?\>\s*/g  //
+	const breakTag = /\<br\/?\>\s*/g
 
 	// Format ends of paragraphs
 	const removeStarFromParaEnd = /\*\s(%)/g  // Removes stars, leaves percents
@@ -171,6 +168,7 @@ function formatLyrics() {
 	let noDivs = junkRemoval.replace(verseChorusVerse, '@').split('@')
 	let newPara = ''
 	let paraLength = 2
+
 	// switch back and forth between creating 2-sentence and 3-sentence paragraphs
 	if (noDivs.length > 1) {   // prevents song from going through loop if there aren't separate verses
 	do {
@@ -190,7 +188,6 @@ function formatLyrics() {
 		while (noDivs.length > 3)
 	}
 	if (noDivs.length >= 1) {
-
 	let lastPara = noDivs.join('* ') + '%</p><p>'
 	paragraphs.push(lastPara)
 	}
@@ -212,11 +209,9 @@ function formatLyrics() {
 	let wordsStillNeeded = numWordsToGet - songWordCount
 	if (wordsStillNeeded <= formattedLyricsArray.length - 10) {
 		// If fewer words than are in song are still needed, slice the words to meet that need.
-		console.log(`numWordsToGet: ${numWordsToGet}\nsongWordCount: ${songWordCount}\nDifference: ${numWordsToGet - songWordCount}`);
 		formattedLyricsArray = formattedLyricsArray.slice(0, wordsStillNeeded);
 	}
 	songWordCount += formattedLyricsArray.length;
-	console.log(`songWordCount is now ${songWordCount}\n`);
 
 	// 6. Add tag to first paragraph
 	lyrics += `<p>${formattedLyricsArray.join(' ')}`;

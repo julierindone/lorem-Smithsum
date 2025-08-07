@@ -13,6 +13,9 @@ let songWordCount = ''
 let rawLyrics = ''
 let songTitle = ''
 
+
+// // // // // // // // // // //  EVENT LISTENERS  // // // // // // // // // // // 
+
 // Get list of all songs by the Smiths as soon as the page loads
 document.addEventListener("DOMContentLoaded", async () => {
 	await getSongList();
@@ -37,6 +40,8 @@ wordCountForm.addEventListener('submit', (event) => {
 
 copyBtnEl.addEventListener('click', copyLyricsToClipboard)
 
+// // // // // // // // // // //  GENERATE & DISPLAY CONTENT  // // // // // // // // // // // 
+
 async function generateLoremSmithsum() {
 	try {
 		resetLyrics() // reset word count and clears previously set of lyrics
@@ -54,31 +59,6 @@ async function generateLoremSmithsum() {
 	}
 }
 
-function getWordCountInputEl() {
-	// clear/hide any existing lyrics and copy button
-	lyricsBoxEl.innerHTML = ''
-	copyBtnEl.style.display = 'none';
-
-	return Number(wordCountInputEl.value.trim())
-}
-
-function clearInput() {
-	errorMessageEl.innerHTML = ''
-	wordCountInputEl.value = ''
-}
-
-// Do last bits of formatting on entire lyrics string. 
-function assembleLyrics() {
-	let endPunctuation = /([:;,!?]*)(["'])?$/
-	let needsCapitalLetter = /(\<p\>)(\.{3,})?\s?([a-z])/g
-
-	// Add ending p tag and end punctuation to last sentence if needed. Ensure all paragraphs start with a capital letter.
-	lyrics = lyrics.replace(endPunctuation, '...</p>').replace(needsCapitalLetter, (match, c1, c2, c3) => {
-		return `${c1}${c2}${c3.toUpperCase}`
-	})
-	return lyrics
-}
-
 function displayLyrics() {
 	lyricsBoxEl.style.display = "unset";
 	copyBtnEl.style.display = "unset";
@@ -90,11 +70,7 @@ function displayLyrics() {
 	lyricsBoxEl.appendChild(lyricsEl)  // add element to the div
 }
 
-function copyLyricsToClipboard() {
-	let copiedLyrics = document.getElementById('lyrics-el')
-	navigator.clipboard.writeText(copiedLyrics.textContent)
-	alert("lorem smithsum has been copied to your clipboard.")
-}
+// // // // // // // // // // //  DATA SERVICE FUNCTIONS   // // // // // // // // // // // 
 
 async function getSongList() {
 	const response = await fetch('/.netlify/functions/getSongs')
@@ -110,7 +86,7 @@ async function getSongList() {
 }
 
 async function getLyrics() {
-	songToGet = pickSongId()  // Get random songId from list
+	songToGet = pickSongId(songList)  // Get random songId from list
 	const songUrl = `https://songmeanings.com/songs/view/${songToGet}/`
 
 	// get raw string of songToGet's lyrics
@@ -130,12 +106,16 @@ async function getLyrics() {
 	}
 }
 
-function pickSongId() {
-	let indexToGet = Math.floor(Math.random(0, songList.length) * songList.length)
-	return (songList[indexToGet]).substring(6)
+function copyLyricsToClipboard() {
+	let copiedLyrics = document.getElementById('lyrics-el')
+	navigator.clipboard.writeText(copiedLyrics.textContent)
+	alert("lorem smithsum has been copied to your clipboard.")
 }
 
+// // // // // // // // // // //   FORMATTING FUNCTIONS   // // // // // // // // // // // 
+
 // TODO: SIMPLIFY THIS ENTIRE FUNCTION, and probably break out paragraphFormatting and lineFormatting into separate functions
+
 function formatLyrics() {
 	const musicNoteFix = /\s*\(♫\)|\(&#x266B;\)|\(&#9835;\)\s*/g  // Remove music notes
 	const extraSpaceRemoval = /\s(\<|"?[:?.,!]+)/g // Remove extra spaces before tags and punctuation
@@ -171,25 +151,25 @@ function formatLyrics() {
 
 	// switch back and forth between creating 2-sentence and 3-sentence paragraphs
 	if (noDivs.length > 1) {   // prevents song from going through loop if there aren't separate verses
-	do {
-		if (paraLength === 2) {
-			newPara = noDivs[0] + '* ' + noDivs[1] + '%</p><p>'
-			noDivs.splice(0, 2)
-			paraLength = 3
+		do {
+			if (paraLength === 2) {
+				newPara = noDivs[0] + '* ' + noDivs[1] + '%</p><p>'
+				noDivs.splice(0, 2)
+				paraLength = 3
 				paragraphs.push(newPara)
-		}
+			}
 			else if (paraLength === 3) {
-			newPara = noDivs[0] + '* ' + noDivs[1] + '* ' + noDivs[2] + '%</p><p>'
-			noDivs.splice(0, 3)
-			paraLength = 2
-		paragraphs.push(newPara)
+				newPara = noDivs[0] + '* ' + noDivs[1] + '* ' + noDivs[2] + '%</p><p>'
+				noDivs.splice(0, 3)
+				paraLength = 2
+				paragraphs.push(newPara)
 			}
 		}
 		while (noDivs.length > 3)
 	}
 	if (noDivs.length >= 1) {
-	let lastPara = noDivs.join('* ') + '%</p><p>'
-	paragraphs.push(lastPara)
+		let lastPara = noDivs.join('* ') + '%</p><p>'
+		paragraphs.push(lastPara)
 	}
 
 	// 3. Replace single line break tags temporarily with a *
@@ -217,9 +197,49 @@ function formatLyrics() {
 	lyrics += `<p>${formattedLyricsArray.join(' ')}`;
 }
 
+// function formatParagraphs() {
+
+// }
+
+// function formatLines() {
+
+// }
+
+// Do last bits of formatting on entire lyrics string. 
+function assembleLyrics() {
+	let endPunctuation = /([:;,!?]*)(["'])?$/
+	let needsCapitalLetter = /(\<p\>)(\.{3,})?\s?([a-z])/g
+
+	// Add ending p tag and end punctuation to last sentence if needed. Ensure all paragraphs start with a capital letter.
+	lyrics = lyrics.replace(endPunctuation, '...</p>').replace(needsCapitalLetter, (match, c1, c2, c3) => {
+		return `${c1}${c2}${c3.toUpperCase}`
+	})
+	return lyrics
+}
+
+// // // // // // // // // // // //  HELPER FUNCTIONS   // // // // // // // // // // // //
+
+function getWordCountInputEl() {
+	// clear/hide any existing lyrics and copy button
+	lyricsBoxEl.innerHTML = ''
+	copyBtnEl.style.display = 'none';
+
+	return Number(wordCountInputEl.value.trim())
+}
+
+function clearInput() {
+	errorMessageEl.innerHTML = ''
+	wordCountInputEl.value = ''
+}
+
 function resetLyrics() {
 	songWordCount = 0;
 	lyrics = '';
 	lyricsBoxEl.style.display = "none";
 	copyBtnEl.style.display = "none";
+}
+
+function pickSongId(songList) {
+	let indexToGet = Math.floor(Math.random(0, songList.length) * songList.length)
+	return (songList[indexToGet]).substring(6)
 }

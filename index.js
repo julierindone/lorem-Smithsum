@@ -113,34 +113,52 @@ function formatLyrics() {
 	const musicNoteFix = /\s*\(♫\)|\(&#x266B;\)|\(&#9835;\)\s*/g  // Remove music notes
 	const extraSpaceRemoval = /\s(\<|"?[:?.,!]+)/g // Remove extra spaces before tags and punctuation
 	const removeStartTags = /^\s*<.[^>]*>/  // Remove any tags or spaces found at start
-	const verseChorusVerse = /(<br><div class="empty-line"><br><\/div>)(<br>)?(<div class="empty-line"><br><\/div>)?/g
-	// Remove string of tags creating verse breaks
 	const breakTag = /\<br\/?\>\s*/g
-
-	// Format ends of paragraphs
-	const removeStarFromParaEnd = /\*\s(%)/g  // Removes stars, leaves percents
-	const paraEndCommaToPeriod = /\s?,("?)%/g  // Change commas at ends of paras to periods
-	const paraEndPunctuation = /\s?([:;.!?]+)(["']?)%\s*/g  //Clear spaces etc from ends of paragraphs with other punctuation
-	const paraNeedsPeriod = /(?<![.!?"'])(["']?)%/g  // If no other punctuation, add period.
-	
-	// Format sentences
-	const linePunctuation = /(["']?[:;.,!?]+['"]?)\*\s*/g  // Trim stars and spacing from lines with punctuation.
-	const lineNeedsComma = /(?<![:;.,"'!?"'])(["']?)\*\s*/g  // Trim stars & adds commas to lines needing punctuation 	// TODO try deleting the second star.
-	const reorderPunctuation = /(["'])([:;.,!,!?])/g  // Flip backwards quotes/punctuation marks
-	const decapitalize = /([,']+)\s([A-Z]{1}[a-z])/g  // Decapitalize words after commas
 	const removeEndTags = /\<(p|br)\>$/g  // Removes extra break or p tags after last paragraph
 	let paragraphs = []
 
-	//  1: Get rid of any music symbols & blank lines at start
+	//  Get rid of any music symbols & blank lines at start
 	let junkRemoval = rawLyrics.replace(extraSpaceRemoval, '$1').replace(musicNoteFix, '');
 	do {
 		junkRemoval = junkRemoval.replace(removeStartTags, '');
 	} while (removeStartTags.test(junkRemoval));
 
-	// 2. Split between verses, then format into paragraphs of varying sizes
-	let noDivs = junkRemoval.replace(verseChorusVerse, '@').split('@')
+	// Create paragraphs of varying sizes
+	createParagraphs(junkRemoval, paragraphs)
+
+	// Replace single line break tags temporarily with a *
+	let noBreakTags = paragraphs.join('').replace(breakTag, '* ');
+
+	// Format paragraphs
+	let paragraphFormatting = formatParagraphs(noBreakTags)
+
+	// Format lines
+	let lineFormatting = formatLines(paragraphFormatting)
+
+	// Refine formatting: reorder backwards punctuation, fix casing after commas, Remove unneeded tags at end
+	let formattedLyrics = lineFormatting.replace(removeEndTags, '');
+
+	// 5. Cut off formattedLyrics at desired # of words
+	let formattedLyricsArray = formattedLyrics.split(' ');
+
+	let wordsStillNeeded = numWordsToGet - songWordCount
+	if (wordsStillNeeded <= formattedLyricsArray.length - 10) {
+		// If fewer words than are in song are still needed, slice the words to meet that need.
+		formattedLyricsArray = formattedLyricsArray.slice(0, wordsStillNeeded);
+	}
+	songWordCount += formattedLyricsArray.length;
+
+	// 6. Add tag to first paragraph
+	lyrics += `<p>${formattedLyricsArray.join(' ')}`;
+}
+
+function createParagraphs(junkRemoval, paragraphs) {
+	const verseChorusVerse = /(<br><div class="empty-line"><br><\/div>)(<br>)?(<div class="empty-line"><br><\/div>)?/g
 	let newPara = ''
 	let paraLength = 2
+
+	// Remove string of tags creating verse breaks
+	let noDivs = junkRemoval.replace(verseChorusVerse, '@').split('@')  // split between verses
 
 	// switch back and forth between creating 2-sentence and 3-sentence paragraphs
 	if (noDivs.length > 1) {   // prevents song from going through loop if there aren't separate verses
@@ -164,39 +182,28 @@ function formatLyrics() {
 		let lastPara = noDivs.join('* ') + '%</p><p>'
 		paragraphs.push(lastPara)
 	}
-
-	// 3. Replace single line break tags temporarily with a *
-	let noBreakTags = paragraphs.join('').replace(breakTag, '* ');
-
-	// 4a. Format paragraphs
-	let paragraphFormatting = noBreakTags.replace(removeStarFromParaEnd, "$1").replace(paraEndCommaToPeriod, ".$1").replace(paraEndPunctuation, '$1$2').replace(paraNeedsPeriod, ".$1")
-
-	let lineFormatting = paragraphFormatting.replace(linePunctuation, '$1 ').replace(lineNeedsComma, ',$1 ').replace(reorderPunctuation, "$2$1").replace(decapitalize, (match, c1, c2) => { return `${c1} ${c2.toLowerCase()}` });
-
-	// 4b: Refine formatting: reorder backwards punctuation, fix casing after commas, Remove unneeded tags at end
-	let formattedLyrics = lineFormatting.replace(removeEndTags, '');
-
-	// 5. Cut off formattedLyrics at desired # of words
-	let formattedLyricsArray = formattedLyrics.split(' ');
-
-	let wordsStillNeeded = numWordsToGet - songWordCount
-	if (wordsStillNeeded <= formattedLyricsArray.length - 10) {
-		// If fewer words than are in song are still needed, slice the words to meet that need.
-		formattedLyricsArray = formattedLyricsArray.slice(0, wordsStillNeeded);
-	}
-	songWordCount += formattedLyricsArray.length;
-
-	// 6. Add tag to first paragraph
-	lyrics += `<p>${formattedLyricsArray.join(' ')}`;
+	return paragraphs
 }
 
-// function formatParagraphs() {
+function formatParagraphs(noBreakTags) {
+	// Format ends of paragraphs
+	const removeStarFromParaEnd = /\*\s(%)/g  // Removes stars, leaves percents
+	const paraEndCommaToPeriod = /\s?,("?)%/g  // Change commas at ends of paras to periods
+	const paraEndPunctuation = /\s?([:;.!?]+)(["']?)%\s*/g  //Clear spaces etc from ends of paragraphs with other punctuation
+	const paraNeedsPeriod = /(?<![.!?"'])(["']?)%/g  // If no other punctuation, add period.
 
-// }
+	return noBreakTags.replace(removeStarFromParaEnd, "$1").replace(paraEndCommaToPeriod, ".$1").replace(paraEndPunctuation, '$1$2').replace(paraNeedsPeriod, ".$1")
+}
 
-// function formatLines() {
+function formatLines(paragraphFormatting) {
+	// Format lines, decapitalize after commas, reorder backwards punctuation
+	const linePunctuation = /(["']?[:;.,!?]+['"]?)\*\s*/g  // Trim stars and spacing from lines with punctuation.
+	const lineNeedsComma = /(?<![:;.,"'!?"'])(["']?)\*\s*/g  // Trim stars & adds commas to lines needing punctuation
+	const reorderPunctuation = /(["'])([:;.,!,!?])/g  // Flip backwards quotes/punctuation marks
+	const decapitalize = /([,']+)\s([A-Z]{1}[a-z])/g  // Decapitalize words after commas
 
-// }
+	return paragraphFormatting.replace(linePunctuation, '$1 ').replace(lineNeedsComma, ',$1 ').replace(reorderPunctuation, "$2$1").replace(decapitalize, (match, c1, c2) => { return `${c1} ${c2.toLowerCase()}` });
+}
 
 // Do last bits of formatting on entire lyrics string. 
 function assembleLyrics() {

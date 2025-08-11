@@ -10,8 +10,6 @@ let numWordsToGet = ''
 let songList = []
 let songWordCount = 0
 let rawLyrics = ''
-let songTitle = ''
-
 
 // // // // // // // // // // //  EVENT LISTENERS  // // // // // // // // // // // 
 
@@ -89,7 +87,6 @@ let songToGet = pickSongId(songList)  // Get random songId from list
 	const response = await fetch(`/.netlify/functions/fetchLyrics?songUrl=${songUrl}`)
 	const result = await response.json()
 	if (response.ok) {
-		songTitle = result.songTitle
 		rawLyrics = result.rawLyrics
 		console.log(`fetchLyrics response ok`);
 	} else {

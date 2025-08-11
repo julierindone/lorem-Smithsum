@@ -125,10 +125,10 @@ function formatLyrics() {
 	const paraEndCommaToPeriod = /\s?,("?)%/g  // Change commas at ends of paras to periods
 	const paraEndPunctuation = /\s?([:;.!?]+)(["']?)%\s*/g  //Clear spaces etc from ends of paragraphs with other punctuation
 	const paraNeedsPeriod = /(?<![.!?"'])(["']?)%/g  // If no other punctuation, add period.
-
+	
 	// Format sentences
 	const linePunctuation = /(["']?[:;.,!?]+['"]?)\*\s*/g  // Trim stars and spacing from lines with punctuation.
-	const lineNeedsComma = /(?<![:;.,"'!?"'])(["']?)\*?\*\s*/g  // Trim stars & adds commas to lines needing punctuation 	// TODO try deleting the second star.
+	const lineNeedsComma = /(?<![:;.,"'!?"'])(["']?)\*\s*/g  // Trim stars & adds commas to lines needing punctuation 	// TODO try deleting the second star.
 	const reorderPunctuation = /(["'])([:;.,!,!?])/g  // Flip backwards quotes/punctuation marks
 	const decapitalize = /([,']+)\s([A-Z]{1}[a-z])/g  // Decapitalize words after commas
 	const removeEndTags = /\<(p|br)\>$/g  // Removes extra break or p tags after last paragraph

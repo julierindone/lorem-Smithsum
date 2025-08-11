@@ -9,7 +9,7 @@ let lyrics = ''
 let numWordsToGet = ''
 let songList = []
 let songToGet = ''
-let songWordCount = ''
+let songWordCount = 0
 let rawLyrics = ''
 let songTitle = ''
 
@@ -66,7 +66,6 @@ function displayLyrics() {
 	const lyricsEl = document.createElement("div")  // create lyrics element
 	lyricsEl.id = 'lyrics-el'
 	lyricsEl.innerHTML = assembleLyrics();
-	document.getElementById('lyrics-el') ? lyricsBoxEl.removeChild(lyricsEl) : null  // remove previously generated lyrics
 	lyricsBoxEl.appendChild(lyricsEl)  // add element to the div
 }
 
@@ -235,6 +234,7 @@ function clearInput() {
 function resetLyrics() {
 	songWordCount = 0;
 	lyrics = '';
+	lyricsBoxEl.innerHTML = ''
 	lyricsBoxEl.style.display = "none";
 	copyBtnEl.style.display = "none";
 }

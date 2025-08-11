@@ -28,7 +28,7 @@ wordCountInputEl.addEventListener('focus', () => {
 
 wordCountForm.addEventListener('submit', (event) => {
 	event.preventDefault()
-	numWordsToGet = getWordCountInputEl()
+	numWordsToGet = Number(wordCountInputEl.value.trim())
 	// if there are non-digits, too many words, or the number is 0...
 	if (/\D/.test(numWordsToGet) || numWordsToGet > 5000 || numWordsToGet === 0) {
 		errorMessageEl.innerHTML = "<p>Please enter a number between 1 and 5000.</p>"
@@ -60,13 +60,11 @@ async function generateLoremSmithsum() {
 }
 
 function displayLyrics() {
-	lyricsBoxEl.style.display = "unset";
-	copyBtnEl.style.display = "unset";
-
 	const lyricsEl = document.createElement("div")  // create lyrics element
 	lyricsEl.id = 'lyrics-el'
 	lyricsEl.innerHTML = assembleLyrics();
 	lyricsBoxEl.appendChild(lyricsEl)  // add element to the div
+	toggleDisplayState("block")
 }
 
 // // // // // // // // // // //  DATA SERVICE FUNCTIONS   // // // // // // // // // // // 
@@ -218,12 +216,9 @@ function assembleLyrics() {
 
 // // // // // // // // // // // //  HELPER FUNCTIONS   // // // // // // // // // // // //
 
-function getWordCountInputEl() {
-	// clear/hide any existing lyrics and copy button
-	lyricsBoxEl.innerHTML = ''
-	copyBtnEl.style.display = 'none';
-
-	return Number(wordCountInputEl.value.trim())
+function toggleDisplayState(displayState) {
+	lyricsBoxEl.style.display = displayState;
+	copyBtnEl.style.display = displayState;
 }
 
 function clearInput() {
@@ -235,8 +230,7 @@ function resetLyrics() {
 	songWordCount = 0;
 	lyrics = '';
 	lyricsBoxEl.innerHTML = ''
-	lyricsBoxEl.style.display = "none";
-	copyBtnEl.style.display = "none";
+	toggleDisplayState("none")
 }
 
 function pickSongId(songList) {

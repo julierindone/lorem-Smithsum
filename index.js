@@ -8,7 +8,6 @@ const copyBtnEl = document.getElementById('copy-btn')
 let lyrics = ''
 let numWordsToGet = ''
 let songList = []
-let songToGet = ''
 let songWordCount = 0
 let rawLyrics = ''
 let songTitle = ''
@@ -83,7 +82,7 @@ async function getSongList() {
 }
 
 async function getLyrics() {
-	songToGet = pickSongId(songList)  // Get random songId from list
+let songToGet = pickSongId(songList)  // Get random songId from list
 	const songUrl = `https://songmeanings.com/songs/view/${songToGet}/`
 
 	// get raw string of songToGet's lyrics

@@ -57,7 +57,7 @@ async function generateLoremSmithsum() {
 }
 
 function displayLyrics() {
-	const lyricsEl = document.createElement("div")  // create lyrics element
+	const lyricsEl = document.createElement("p")  // create lyrics element
 	lyricsEl.id = 'lyrics-el'
 	lyricsEl.innerHTML = assembleLyrics();
 	lyricsBoxEl.appendChild(lyricsEl)  // add element to the div
@@ -101,120 +101,133 @@ let songToGet = pickSongId(songList)  // Get random songId from list
 
 function copyLyricsToClipboard() {
 	let copiedLyrics = document.getElementById('lyrics-el')
-	navigator.clipboard.writeText(copiedLyrics.textContent)
+	let convertedLyrics = (copiedLyrics.innerHTML).replace(/\<br\>/g, '\n')
+	navigator.clipboard.writeText(convertedLyrics)
 	alert("lorem smithsum has been copied to your clipboard.")
 }
 
 // // // // // // // // // // //   FORMATTING FUNCTIONS   // // // // // // // // // // // 
 
-// TODO: SIMPLIFY THIS ENTIRE FUNCTION, and probably break out paragraphFormatting and lineFormatting into separate functions
-
 function formatLyrics() {
-	const musicNoteFix = /\s*\(♫\)|\(&#x266B;\)|\(&#9835;\)\s*/g  // Remove music notes
-	const extraSpaceRemoval = /\s(\<|"?[:?.,!]+)/g // Remove extra spaces before tags and punctuation
-	const removeStartTags = /^\s*<.[^>]*>/  // Remove any tags or spaces found at start
-	const breakTag = /\<br\/?\>\s*/g
-	const removeEndTags = /\<(p|br)\>$/g  // Removes extra break or p tags after last paragraph
-	let paragraphs = []
+	//  Get rid of any music symbols & extra spaces
+	let junkRemoval = removeJunk()
 
-	//  Get rid of any music symbols & blank lines at start
-	let junkRemoval = rawLyrics.replace(extraSpaceRemoval, '$1').replace(musicNoteFix, '');
-	do {
-		junkRemoval = junkRemoval.replace(removeStartTags, '');
-	} while (removeStartTags.test(junkRemoval));
+	// Remove tags
+	let taglessLyrics = removeTags(junkRemoval);
 
-	// Create paragraphs of varying sizes
-	createParagraphs(junkRemoval, paragraphs)
+	// Update punctuation
+	let formattedPunctuation = formatPunctuation(taglessLyrics)
 
-	// Replace single line break tags temporarily with a *
-	let noBreakTags = paragraphs.join('').replace(breakTag, '* ');
+	// Restructure lyrics into paragraphs of varying lengths
+	let paragraphString = createParagraphs(formattedPunctuation)
 
-	// Format paragraphs
-	let paragraphFormatting = formatParagraphs(noBreakTags)
+	// refine formatting - // remove $, capitals after commas
+	let refinedParagraphs = refineFormatting(paragraphString)
 
-	// Format lines
-	let lineFormatting = formatLines(paragraphFormatting)
+	let formattedSong = cutToWordCount(refinedParagraphs)
 
-	// Refine formatting: reorder backwards punctuation, fix casing after commas, Remove unneeded tags at end
-	let formattedLyrics = lineFormatting.replace(removeEndTags, '');
-
-	// 5. Cut off formattedLyrics at desired # of words
-	let formattedLyricsArray = formattedLyrics.split(' ');
-
-	let wordsStillNeeded = numWordsToGet - songWordCount
-	if (wordsStillNeeded <= formattedLyricsArray.length - 10) {
-		// If fewer words than are in song are still needed, slice the words to meet that need.
-		formattedLyricsArray = formattedLyricsArray.slice(0, wordsStillNeeded);
-	}
-	songWordCount += formattedLyricsArray.length;
-
-	// 6. Add tag to first paragraph
-	lyrics += `<p>${formattedLyricsArray.join(' ')}`;
+	lyrics += formattedSong;
 }
 
-function createParagraphs(junkRemoval, paragraphs) {
+
+function removeJunk() {
+	const musicNoteFix = /(\s)*(\(♫\)|\(&#x266B;\)|\(&#9835;\))(\s)*/g  // Remove music notes
+	const startEndTags = /^(\s*<[^>]+>\s*)+|(\s*<[^>]+>\s*)+$/g;  // Remove any tags or spaces found at start/end
+	const spaceAroundTags = /\s*(<[^>]+>)\s*/g  // Remove extra spaces before/after tags
+	const spaceBeforePunctuation = /\s([:?.,!]+)/g
+
+	return rawLyrics.replace(musicNoteFix, '')
+		.replace(startEndTags, '')
+		.replace(spaceAroundTags, '$1')
+		.replace(spaceBeforePunctuation, '$1');
+}
+
+function removeTags(junkRemoval) {
 	const verseChorusVerse = /(<br><div class="empty-line"><br><\/div>)(<br>)?(<div class="empty-line"><br><\/div>)?/g
+	const breakTag = /\<br\/?\>/g
+	const anyTag = /\<[^>]+>/g
+
+	return junkRemoval.replace(verseChorusVerse, '@$')  // Replace verse/chorus tag sequence with @$
+		.replace(breakTag, '#')  // Replace single line break tags temporarily with a #
+		.replace(anyTag, '');  // Delete any extra tags hanging out.
+}
+
+function formatPunctuation(taglessLyrics) {
+	const lineNeedsComma = /(?<![:?.,!"'])(["'\)]*#)/g
+	const paraNeedsPeriod = /(?<![:?.,!"'])([:,]?)(["'\)]*@\$)/g
+
+	return taglessLyrics.replace(lineNeedsComma, ',$1')  // insert commas before all # with no punctuation
+		.replace(paraNeedsPeriod, '.$2') // periods (not commas) before all @$
+}
+
+function createParagraphs(formattedPunctuation) {
+	const paraNeedsPeriod = /(?<![:?.,!"'])([;:,]?)(["'\)]*\%)/g
+	let paragraphs = []
 	let newPara = ''
 	let paraLength = 2
 
 	// Remove string of tags creating verse breaks
-	let noDivs = junkRemoval.replace(verseChorusVerse, '@').split('@')  // split between verses
+	let origStructureArray = formattedPunctuation.split('@')
 
 	// switch back and forth between creating 2-sentence and 3-sentence paragraphs
-	if (noDivs.length > 1) {   // prevents song from going through loop if there aren't separate verses
+	if (origStructureArray.length > 1) {   // prevents song from going through loop if there aren't separate verses
 		do {
 			if (paraLength === 2) {
-				newPara = noDivs[0] + '* ' + noDivs[1] + '%</p><p>'
-				noDivs.splice(0, 2)
+				newPara = origStructureArray[0] + '#' + origStructureArray[1] + `%<br><br>`
+				origStructureArray.splice(0, 2)
 				paraLength = 3
-				paragraphs.push(newPara)
 			}
 			else if (paraLength === 3) {
-				newPara = noDivs[0] + '* ' + noDivs[1] + '* ' + noDivs[2] + '%</p><p>'
-				noDivs.splice(0, 3)
+				newPara = origStructureArray[0] + '#' + origStructureArray[1] + '#' + origStructureArray[2] + `%<br><br>`
+				origStructureArray.splice(0, 3)
 				paraLength = 2
-				paragraphs.push(newPara)
 			}
+			paragraphs.push(newPara.replace(paraNeedsPeriod, '.$2'))
 		}
-		while (noDivs.length > 3)
+		while (origStructureArray.length > 3)
 	}
-	if (noDivs.length >= 1) {
-		let lastPara = noDivs.join('* ') + '%</p><p>'
-		paragraphs.push(lastPara)
+	if (origStructureArray.length >= 1) {
+		let lastPara = origStructureArray.join('#') + `%<br><br>`
+		paragraphs.push(lastPara.replace(paraNeedsPeriod, '.$2'))
 	}
-	return paragraphs
+	return paragraphs.join('')
 }
 
-function formatParagraphs(noBreakTags) {
-	// Format ends of paragraphs
-	const removeStarFromParaEnd = /\*\s(%)/g  // Removes stars, leaves percents
-	const paraEndCommaToPeriod = /\s?,("?)%/g  // Change commas at ends of paras to periods
-	const paraEndPunctuation = /\s?([:;.!?]+)(["']?)%\s*/g  //Clear spaces etc from ends of paragraphs with other punctuation
-	const paraNeedsPeriod = /(?<![.!?"'])(["']?)%/g  // If no other punctuation, add period.
+function refineFormatting(paragraphString) {
 
-	return noBreakTags.replace(removeStarFromParaEnd, "$1").replace(paraEndCommaToPeriod, ".$1").replace(paraEndPunctuation, '$1$2').replace(paraNeedsPeriod, ".$1")
+	const capsAfterCommas = /([,;]+#)([\("']*)([A-Z]{1}[a-z])/g  // Decapitalize words after commas
+	const uppercaseAfterBreak = /(\<br\>)([a-z])/g;
+	const uppercaseAfterPeriodHash = /(\.)(["'\)])?(\#)(["'\)])?([a-z])/g
+
+	return paragraphString.replace(/\$/g, '')  //Remove $
+		.replace(capsAfterCommas, (match, c1, c2, c3) => { return `${c1}${c2}${c3.toLowerCase()}` })
+		.replace(uppercaseAfterBreak, (match, c1, c2) => { return `${c1}${c2.toUpperCase()}`; })
+		.replace(uppercaseAfterPeriodHash, (match, c1, c2, c3, c4, c5) => { return `${c1}${c2}${c3}${c4}${c5.toUpperCase()}` })
+		.replace(/\#|%/g, ' ');
 }
 
-function formatLines(paragraphFormatting) {
-	// Format lines, decapitalize after commas, reorder backwards punctuation
-	const linePunctuation = /(["']?[:;.,!?]+['"]?)\*\s*/g  // Trim stars and spacing from lines with punctuation.
-	const lineNeedsComma = /(?<![:;.,"'!?"'])(["']?)\*\s*/g  // Trim stars & adds commas to lines needing punctuation
-	const reorderPunctuation = /(["'])([:;.,!,!?])/g  // Flip backwards quotes/punctuation marks
-	const decapitalize = /([,']+)\s([A-Z]{1}[a-z])/g  // Decapitalize words after commas
+function cutToWordCount(refinedParagraphs) {
+	const removeEndTags = /(\s*<[^>]+>\s*)+$/;  // Removes extra break or p tags after last paragraph
 
-	return paragraphFormatting.replace(linePunctuation, '$1 ').replace(lineNeedsComma, ',$1 ').replace(reorderPunctuation, "$2$1").replace(decapitalize, (match, c1, c2) => { return `${c1} ${c2.toLowerCase()}` });
+	// cut off refinedParagraphs at desired # of words
+	let songArray = refinedParagraphs.split(' ');
+
+	let wordsStillNeeded = numWordsToGet - songWordCount;
+	// If fewer words than are in song are still needed, slice the words to meet that need.
+	if (wordsStillNeeded <= songArray.length - 10) {
+		songArray = songArray.slice(0, wordsStillNeeded);
+	}
+	songWordCount += songArray.length;
+
+	return songArray.join(' ');
 }
 
 // Do last bits of formatting on entire lyrics string. 
 function assembleLyrics() {
 	let endPunctuation = /([:;,!?]*)(["'])?$/
-	let needsCapitalLetter = /(\<p\>)(\.{3,})?\s?([a-z])/g
 
-	// Add ending p tag and end punctuation to last sentence if needed. Ensure all paragraphs start with a capital letter.
-	lyrics = lyrics.replace(endPunctuation, '...</p>').replace(needsCapitalLetter, (match, c1, c2, c3) => {
-		return `${c1}${c2}${c3.toUpperCase}`
-	})
-	return lyrics
+	// Add end punctuation to last sentence if needed.
+	return lyrics.replace(endPunctuation, '...')
 }
 
 // // // // // // // // // // // //  HELPER FUNCTIONS   // // // // // // // // // // // //

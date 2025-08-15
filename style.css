@@ -199,28 +199,24 @@ button:active {
 /* TODO: Add a smoother transition when displaying the lyrics. */
 #lyrics-box {
 	display: none;
-	opacity: .8;
+	opacity: .85;
 	overflow-y: auto;
 	background-color: var(--white);
-	border-block: solid .5rem var(--white);
+	border-block: solid .65rem var(--white);
 	/* Hacky fix for weird issue with corners. Remove if it's making things worse! Should obly be needed for 625pc since i think it has something to do with the scrollbar. */
 	border-inline: solid 1px #00000000;
+}
 
-	p {
-		color: var(--dark-ice-blue);
-		line-height: 1.5;
-		margin: 0;
-		padding-inline: .75rem;
-	}
+#lyrics-el {
+	color: var(--dark-ice-blue);
+	line-height: 1.5;
+	margin: 0;
+	padding-inline: .75rem;
 }
 
 span.line {
 	padding-top: 0;
 	white-space: preserve nowrap;
-}
-
-#lyrics-el p {
-	margin-bottom: .7em;
 }
 
 /* ================================================= */
@@ -286,15 +282,15 @@ span.line {
 	#lyrics-box {
 		scrollbar-width: none;  /* Firefox */
 		-ms-overflow-style: none;  /* IE and Edge */
-		p {
-			line-height: 1.5;
-		}
 	}
-		#lyrics-box::--webkit-scrollbar {  /* Chrome */
-			width: 0;
-			background: transparent;
-		}
-
+	#lyrics-box::--webkit-scrollbar {  /* Chrome */
+		width: 0;
+		background: transparent;
+	}
+	
+	#lyrics-el {
+		line-height: 1.5;
+	}
 	footer {
 		margin: .8rem auto 0.25rem auto;
 		p {
@@ -340,7 +336,7 @@ span.line {
 		margin-inline: .5rem;
 	}
 
-	#lyrics-box p {
+	#lyrics-el {
 		padding-inline: .5rem;
 	}
 

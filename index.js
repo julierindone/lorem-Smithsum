@@ -48,7 +48,7 @@ async function generateLoremSmithsum() {
 			await getLyrics()  // get lyrics from source
 			formatLyrics()  // format for display
 		}
-		while (numWordsToGet > songWordCount);
+		while (songWordCount < numWordsToGet - 15);
 
 		displayLyrics()  // display final lyrics in UI
 	}
@@ -242,7 +242,7 @@ function cutToWordCount(refinedParagraphs) {
 
 	let wordsStillNeeded = numWordsToGet - songWordCount;
 	// If fewer words than are in song are still needed, slice the words to meet that need.
-	if (wordsStillNeeded <= songArray.length - 10) {
+	if (wordsStillNeeded < songArray.length) {
 		songArray = songArray.slice(0, wordsStillNeeded);
 	}
 	songWordCount += songArray.length;

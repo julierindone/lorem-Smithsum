@@ -5,6 +5,7 @@ const lyricsBoxEl = document.getElementById('lyrics-box')
 const errorMessageEl = document.getElementById('error-message')
 const copyBtnEl = document.getElementById('copy-btn')
 
+let songToGet = ''
 let lyrics = ''
 let numWordsToGet = ''
 let songList = []
@@ -80,7 +81,12 @@ async function getSongList() {
 }
 
 async function getLyrics() {
-let songToGet = pickSongId(songList)  // Get random songId from list
+	do {
+		songToGet = pickSongId(songList)  // Get random songId from list
+	}
+	// filter out Meat is Murder (worst song) & Suffer Little Children (too sad for casual viewing, even for me)
+	while (songToGet === '13110' || songToGet === '51221')
+
 	const songUrl = `https://songmeanings.com/songs/view/${songToGet}/`
 
 	// get raw string of songToGet's lyrics
@@ -123,12 +129,12 @@ function formatLyrics() {
 
 	// refine formatting - // remove $, capitals after commas
 	let refinedParagraphs = refineFormatting(paragraphString)
+	let nitsPicked = pickingNits(refinedParagraphs)
 
-	let formattedSong = cutToWordCount(refinedParagraphs)
+	let formattedSong = cutToWordCount(nitsPicked)
 
 	lyrics += formattedSong;
 }
-
 
 function removeJunk() {
 	const musicNoteFix = /(\s)*(\(♫\)|\(&#x266B;\)|\(&#9835;\))(\s)*/g  // Remove music notes
@@ -204,6 +210,28 @@ function refineFormatting(paragraphString) {
 		.replace(uppercaseAfterBreak, (match, c1, c2) => { return `${c1}${c2.toUpperCase()}`; })
 		.replace(uppercaseAfterPeriodHash, (match, c1, c2, c3, c4, c5) => { return `${c1}${c2}${c3}${c4}${c5.toUpperCase()}` })
 		.replace(/\#|%/g, ' ');
+}
+
+function pickingNits(refinedParagraphs) {
+	let upperCaseA = /(,\s)(["'\(]?)(A\s)/g //returns word 'a' to lowercase
+	let mister = /(\s|\>|["'(])([Mm])([Rr])(\.?)/g
+	let needsSpace = /([\.,]+)([^\s\\."'\)])/g 		// WATCH: I just changed this to add comma to $1 & more characters to $2.
+
+	// correct most important line in Cemetry Gates
+	if (songToGet === '35105') {
+		refinedParagraphs = refinedParagraphs
+			.replace(/keats/g, 'Keats')
+			.replace(/weird lover Wilde is on mine/i, 'Whale Blubber Wilde is on mine...')
+			.replace(/\(sugar\.\)./i, 'Sugar!')
+	}
+	// correct weird DJ
+	else if (songToGet === '35109') {
+		refinedParagraphs = refinedParagraphs.replace(/[Dd]\.(\s?)[Jj]/g, 'DJ')
+	}
+	return refinedParagraphs
+		.replace(upperCaseA, (match, c1, c2, c3) => `${c1}${c2}${c3.toLowerCase()}`)
+		.replace(mister, (match, c1, c2, c3, c4) => `${c1}${c2.toUpperCase()}${c3}.`)
+		.replace(needsSpace, ('$1 $2'))
 }
 
 function cutToWordCount(refinedParagraphs) {

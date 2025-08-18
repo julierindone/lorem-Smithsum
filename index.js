@@ -65,7 +65,7 @@ function displayLyrics() {
 	toggleDisplayState("block")
 }
 
-// // // // // // // // // // //  DATA SERVICE FUNCTIONS   // // // // // // // // // // // 
+// // // // // // // // // // //  DATA SERVICE FUNCTIONS  // // // // // // // // // // // 
 
 async function getSongList() {
 	const response = await fetch('/.netlify/functions/getSongs')
@@ -98,8 +98,6 @@ async function getLyrics() {
 	} else {
 		console.error("Error from fetchLyrics function:", result.error)
 	}
-
-	// TODO: Would be more efficient for this to be checked and re-called in the server function, but get it working first.
 	if (rawLyrics.length < 50) {  //  filter out instrumentals
 		await getLyrics()  // call getLyrics() again.
 	}
@@ -141,11 +139,12 @@ function removeJunk() {
 	const startEndTags = /^(\s*<[^>]+>\s*)+|(\s*<[^>]+>\s*)+$/g;  // Remove any tags or spaces found at start/end
 	const spaceAroundTags = /\s*(<[^>]+>)\s*/g  // Remove extra spaces before/after tags
 	const spaceBeforePunctuation = /\s([:?.,!]+)/g
+	const spaceAfterPunctuation = /([?.,!]+)\s/g
 
 	return rawLyrics.replace(musicNoteFix, '')
 		.replace(startEndTags, '')
 		.replace(spaceAroundTags, '$1')
-		.replace(spaceBeforePunctuation, '$1');
+		.replace(spaceBeforePunctuation, '$1')
 }
 
 function removeTags(junkRemoval) {
@@ -159,15 +158,15 @@ function removeTags(junkRemoval) {
 }
 
 function formatPunctuation(taglessLyrics) {
-	const lineNeedsComma = /(?<![:?.,!"'])(["'\)]*#)/g
-	const paraNeedsPeriod = /(?<![:?.,!"'])([:,]?)(["'\)]*@\$)/g
+	const lineNeedsComma = /(?<![:;?.,!"'\)])(["'\)]*#)/g
+	const paraNeedsPeriod = /(?<![:?.,!"'\)])([:,]?)(["'\)]*@\$)/g
 
 	return taglessLyrics.replace(lineNeedsComma, ',$1')  // insert commas before all # with no punctuation
 		.replace(paraNeedsPeriod, '.$2') // periods (not commas) before all @$
 }
 
 function createParagraphs(formattedPunctuation) {
-	const paraNeedsPeriod = /(?<![:?.,!"'])([;:,]?)(["'\)]*\%)/g
+	const paraNeedsPeriod = /(?<![:?.,!"'\)])([;:,]?)(["'\)]*\%)/g
 	let paragraphs = []
 	let newPara = ''
 	let paraLength = 2
@@ -200,22 +199,21 @@ function createParagraphs(formattedPunctuation) {
 }
 
 function refineFormatting(paragraphString) {
-
-	const capsAfterCommas = /([,;]+#)([\("']*)([A-Z]{1}[a-z])/g  // Decapitalize words after commas
+	const capsAfterCommas = /([,;])(['\)]?)(#|\s)([\(']?)([A-Z]{1})([a-z]+)/g  // Decapitalize words after commas
 	const uppercaseAfterBreak = /(\<br\>)([a-z])/g;
-	const uppercaseAfterPeriodHash = /(\.)(["'\)])?(\#)(["'\)])?([a-z])/g
+	const uppercaseAfterPeriod = /([!?.])(["'\)]?)(\#|\s)([a-z])/g
 
 	return paragraphString.replace(/\$/g, '')  //Remove $
-		.replace(capsAfterCommas, (match, c1, c2, c3) => { return `${c1}${c2}${c3.toLowerCase()}` })
+		.replace(capsAfterCommas, (match, c1, c2, c3, c4, c5, c6) => { return `${c1}${c2}${c3}${c4}${c5.toLowerCase()}${c6}` })
 		.replace(uppercaseAfterBreak, (match, c1, c2) => { return `${c1}${c2.toUpperCase()}`; })
-		.replace(uppercaseAfterPeriodHash, (match, c1, c2, c3, c4, c5) => { return `${c1}${c2}${c3}${c4}${c5.toUpperCase()}` })
+		.replace(uppercaseAfterPeriod, (match, c1, c2, c3, c4) => { return `${c1}${c2}${c3}${c4.toUpperCase()}` })
 		.replace(/\#|%/g, ' ');
 }
 
 function pickingNits(refinedParagraphs) {
 	let upperCaseA = /(,\s)(["'\(]?)(A\s)/g //returns word 'a' to lowercase
-	let mister = /(\s|\>|["'(])([Mm])([Rr])(\.?)/g
-	let needsSpace = /([\.,]+)([^\s\\."'\)])/g 		// WATCH: I just changed this to add comma to $1 & more characters to $2.
+	let mister = /(\s|\>|["'(])([Mm])([Rr])(\.?)/g // adds period to Mr.
+	let needsSpace = /([\.,]+)([^\s\\."'\)])/g 		//  ensures space after punctuation
 
 	// correct most important line in Cemetry Gates
 	if (songToGet === '35105') {
@@ -254,7 +252,7 @@ function cutToWordCount(refinedParagraphs) {
 function assembleLyrics() {
 	let endPunctuation = /([:;,!?]*)(["'])?$/
 
-	// Add end punctuation to last sentence if needed.
+	// Change non-period end punctuation to elipses on last sentence.
 	return lyrics.replace(endPunctuation, '...')
 }
 

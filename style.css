@@ -15,12 +15,11 @@
 	font-optical-sizing: auto;
 }
 
-body, html {
-	font-family: futura, Roboto, 'Open Sans', 'Helvetica Neue', sans-serif;
-	background-color: var(--dark-gray);
-	color: var(--white);
-	margin: 0;
-	height: 100%;
+.open-sans-smiths {
+	font-family: "Open Sans", sans-serif;
+	font-optical-sizing: auto;
+	font-variation-settings:
+		"wdth" 100;
 }
 
 #wrapper {
@@ -58,6 +57,13 @@ h1 {
 	-webkit-text-stroke-color: var(--white);
 	line-height: 1.2;
 	opacity: .9;
+.subheading {
+	font-size: clamp(1rem, 0.95rem + 0.75vw, 2rem);
+	font-weight: 500;
+	letter-spacing: -.32px;
+	word-spacing: 1.25px;
+	padding-left: .25em;
+	margin-block: .1em 0; /* Leave as rem - otherwise it's too stretched out on wider screens. */
 }
 
 main {
@@ -149,8 +155,7 @@ button {
 	font-family: "Bodoni Moda SC", futura, Roboto, 'Open Sans', 'Helvetica Neue', sans-serif;
 	font-size: 1.075rem;
 	color: var(--white);
-	background: #85b2c2d9;
-	border-radius: 10px;
+	font-family: "Open Sans", sans-serif;
 	border: 1px solid #58828f;
 	box-shadow: 3px 3px #578390ed;
 	padding: .04rem .62rem .18rem .62rem !important;

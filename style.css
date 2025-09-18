@@ -91,19 +91,18 @@ main {
 	flex-direction: column;
 	flex-grow: 1;
 	overflow-y: auto;
-	margin-top: .9rem;
 }
 
 footer {
-	margin-block: 3vh;
-	text-align: center;
+	margin-block: 2vh;
 	opacity: .75;
 
 	p {
-		display: inline-block;
 		font-size: clamp(0.7rem, 0.6em + .8vw, .9rem);
-		margin-block: 0.9rem 0;
-		margin-inline: var(--inlines-padding-margins);
+		text-wrap-style: balance;
+		text-align: center;
+		margin-block: 1.2rem 0;
+		margin-inline: var(--inline-padding-margins);
 	}
 	hr {
 		border: none;
@@ -171,16 +170,16 @@ label {
 
 button {
 	background-color: #85b2c2d9;
+	color: var(--white);
 	font-family: "Open Sans", sans-serif;
-	font-size: clamp(.85rem, .78rem + .35vw, 1rem);
+	font-size: clamp(.8rem, .78rem + .4vw, 1rem);
 	font-weight: 500;
-	letter-spacing: -.3px;
 	word-spacing: 1px;
 	border: 1px solid #58828f;
 	border-radius: 7px;
 	box-shadow: 3px 3px #578390a8;
 	padding-block: .4em .5em;
-	padding-inline: .8em;
+	padding-inline: .65em;
 	margin-right: .2em; /* margin-right value is so the shadow doesn't get cut off. */
 }
 
@@ -311,6 +310,18 @@ span.line {
 	#lyrics-el {
 		line-height: 1.5;
 	}
+}
+
+@media (max-width: 500px) {
+	.word-count-input-container {
+		justify-content: space-between;
+		max-width: unset;
+	}
+}
+
+/* ===================== SMALL PHONE ==================== */
+
+@media (max-width:390px) {
 
 	#lyrics-el {
 		padding-inline: .5rem;

@@ -8,7 +8,17 @@
 	--dark-ice-blue: #397487;
 }
 
-/* Base sizing: (min-width:881px) and (max-width:1250px) */
+/* Base sizing: (min-width:626px) and (max-width:1250px) */
+html, body, h1, p {
+	margin: 0;
+	padding: 0;
+}
+
+body, html {
+	background-color: var(--dark-gray);
+	color: var(--white);
+	height: 100%;
+}
 
 .bodoni-moda-sc {
 	font-family: "Bodoni Moda SC", serif;
@@ -135,7 +145,11 @@ label {
 	width: 4rem;
 	opacity: .75;
 	box-sizing: border-box;
-	margin-left: .2rem;
+#input-box {
+	display: flex;
+	flex-wrap: wrap;
+	gap: .5rem;
+	align-items: center;
 }
 
 #word-count-input:focus {
@@ -144,11 +158,11 @@ label {
 
 ::placeholder {
 	color: var(--ice-blue);
-	opacity: .65;
+	opacity: .7;
 }
 
 :focus::placeholder {
-	opacity: .5;
+	opacity: .55;
 }
 
 button {

@@ -1,11 +1,11 @@
-/* TODO: Breakpoints are weird, could be simplified and/or made more resposive */
-
 :root {
 	--white: #fbfbfb;
 	--dark-gray: #2f2f2f;
 	--ice-blue: #78a2b0;
 	--trans-ice-blue: #78a2b0a1;
 	--dark-ice-blue: #397487;
+	--inline-padding-margins: clamp(0.7em, 0.4em + 1.4vw, 3.5em);
+	--main-font-size: clamp(0.95rem, .95rem + 0.15vw, 1.2rem);
 }
 
 /* Base sizing: (min-width:626px) and (max-width:1250px) */
@@ -53,20 +53,20 @@ body, html {
 	background-color: var(--trans-ice-blue);
 	display: flex;
 	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	margin-top: 4%;
-	/* TODO: Convert to em? */
-	padding: 1.5% 1.75rem;
+	margin-block: clamp(0.9rem, 0.7em + 1.9vw, 2em) .3em;
+	padding-block: clamp(0.7rem, 0.45em + 1.5vw, 2em);
+	padding-inline: var(--inline-padding-margins);
 }
 
 h1 {
-	font-size: 4.0rem;
-	margin: 0;
+	font-size: clamp(2rem, 1.8rem + 3.3vw, 6rem);
+	word-spacing: 4px;
+	letter-spacing: -1px;
 	-webkit-text-stroke-width: .5px;
 	-webkit-text-stroke-color: var(--white);
-	line-height: 1.2;
+	line-height: 1.15;
 	opacity: .9;
+	text-wrap: balance;
 }
 
 .subheading {
@@ -83,7 +83,7 @@ main {
 	flex-direction: column;
 	flex-grow: 1;
 	overflow-y: auto;
-	margin-inline: 1.75rem;
+	margin-inline: var(--inline-padding-margins);
 }
 
 .lyrics-container {
@@ -123,29 +123,25 @@ footer {
 
 .word-count-input-container {
 	display: flex;
-	justify-items: center;
-	align-items: center;
-	column-gap: 1.4rem;
-	align-content: center;
-	margin-top: .8rem;
-	padding: .018rem 0; /* WATCH: what is the purpose of this padding? */
+	flex-wrap: wrap;
+	gap: .5em 2em;
+	margin-top: clamp(0.6em, 0.4em + .7vw, 1.2em);
+	max-width: 400px;
 }
 
-.word-count-input-container > * > * {
-	padding: .16rem 0 .14rem 0;
-	font-size: 1.05rem;
-}
-
-label {
-	background: #5656563b;
+.word-count-input-container * {
+	font-weight: 600;
 }
 
 #word-count-input {
+	font-size: clamp(0.95rem, .9rem + 0.29vw, 1.2rem);
 	color: var(--dark-ice-blue);
 	text-align: center;
-	width: 4rem;
+	width: 4em;
 	opacity: .75;
 	box-sizing: border-box;
+	border-radius: 5px;
+	padding: .3em;
 }
 
 #input-box {
@@ -153,6 +149,11 @@ label {
 	flex-wrap: wrap;
 	gap: .5rem;
 	align-items: center;
+}
+
+#input-box label {
+	opacity: .9;
+	font-weight: 500;
 }
 
 #word-count-input:focus {
@@ -204,13 +205,12 @@ button:active {
 }
 
 #error-message p {
-	font-size: 1.02rem;
+	font-size: clamp(0.9rem, .85rem + 0.25vw, 1.2rem);
 	color: #ff5d75;
 	text-shadow: 0 0 .75px black;
-	background: #3e3e3eb0;
+	background-color: #3e3e3eb0;
 	display: inline-block;
-	margin-top: .8rem;
-	margin-bottom: 0;
+	margin-block: .8rem 0;
 	padding: .06rem .05rem .06rem 0;
 	border-radius: 2px;
 }
@@ -221,21 +221,17 @@ button:active {
 	opacity: .85;
 	overflow-y: auto;
 	background-color: var(--white);
-	border-block: solid .65rem var(--white);
 	/* Hacky fix for weird issue with corners. Remove if it's making things worse! Should obly be needed for 625pc since i think it has something to do with the scrollbar. */
+	border-block: solid .65rem var(--white);
 	border-inline: solid 1px #00000000;
+	margin-block: 1em;
 }
 
 #lyrics-el {
 	color: var(--dark-ice-blue);
 	line-height: 1.5;
-	margin: 0;
-	padding-inline: .75rem;
-}
-
-span.line {
-	padding-top: 0;
-	white-space: preserve nowrap;
+	padding-inline: .75em;
+	font-size: var(--main-font-size);
 }
 
 /* ================================================= */
@@ -244,26 +240,9 @@ span.line {
 
 /* ===================== DESKTOP =================== */
 @media (min-width:1251px) {
-	html {
-		font-size: 18px;
-	}
-	h1 {
-		font-size: 4.6rem;
-	}
-
-	.color-band {
-		padding-inline: 3rem;
-	}
 	main {
-		margin-inline: 3rem;
-	}
-}
-
-/* ===================== TABLET ==================== */
-@media (min-width:625px) and (max-width:880px) {
-	h1 {
-		font-size: 3.2rem;
-	}
+			margin-inline: 3rem;
+		}
 }
 
 /* ===================== PHONE ==================== */
@@ -272,30 +251,8 @@ span.line {
 		overflow: scroll;
 	}
 
-	.color-band {
-		padding: .65rem 1rem;
-	}
-
-	h1 {
-		font-size: 3.1rem;
-	}
-
 	.rocker-boys {
 		background-position: right;
-	}
-
-	main {
-		margin-inline: 1rem;
-	}
-
-	.word-count-input-container {
-		align-items: unset;
-		flex-direction: column;
-		width: max-content;
-	} 
-
-	#generate-smithsum-btn {
-		margin-top: .65rem;
 	}
 
 	#lyrics-box {
@@ -306,12 +263,13 @@ span.line {
 		width: 0;
 		background: transparent;
 	}
-	
+
 	#lyrics-el {
 		line-height: 1.5;
 	}
 }
 
+/* This will be the smallest size to keep and will be the base css if I rewrite. */
 @media (max-width: 500px) {
 	.word-count-input-container {
 		justify-content: space-between;
@@ -324,7 +282,8 @@ span.line {
 @media (max-width:390px) {
 
 	#lyrics-el {
-		padding-inline: .5rem;
+	line-height: 1.55;
+	padding-inline: .7em;
 	}
 
 	footer p {

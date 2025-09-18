@@ -170,41 +170,38 @@ label {
 }
 
 button {
-	font-family: "Bodoni Moda SC", futura, Roboto, 'Open Sans', 'Helvetica Neue', sans-serif;
-	font-size: 1.075rem;
-	color: var(--white);
+	background-color: #85b2c2d9;
 	font-family: "Open Sans", sans-serif;
+	font-size: clamp(.85rem, .78rem + .35vw, 1rem);
+	font-weight: 500;
+	letter-spacing: -.3px;
+	word-spacing: 1px;
 	border: 1px solid #58828f;
-	box-shadow: 3px 3px #578390ed;
-	padding: .04rem .62rem .18rem .62rem !important;
-	-webkit-text-stroke-width: .2px;
-	-webkit-text-stroke-color: var(--white);
-}
-
-#generate-smithsum-btn {
-	align-self: flex-start;
-	margin-top: .05rem;
+	border-radius: 7px;
+	box-shadow: 3px 3px #578390a8;
+	padding-block: .4em .5em;
+	padding-inline: .8em;
+	margin-right: .2em; /* margin-right value is so the shadow doesn't get cut off. */
 }
 
 #copy-btn {
 	align-self: flex-end;
-	width: 8rem;
 	display: none;
-	margin: .55rem .18rem .18rem 0;
+	margin-bottom: 0.2em;
 }
 
 @media (hover: hover) {
 	button:hover {
-		background: #71a2b1eb;
+		background-color: #71a2b1eb;
 		box-shadow: 3px 3px #4e7885f7;
 		transition: background-color .1s ease-in-out, box-shadow .1s ease-in-out;
 	}
 }
 
 button:active {
-	background: #5f8b99f2;
+	background-color: #5f8b99f2;
 	box-shadow: 2px 2px #3f626c;
-	transform: translateY(2px) translateX(2px);
+	transform: translateY(2px) translateX(2px) scale(98%);
 }
 
 #error-message p {

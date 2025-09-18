@@ -67,6 +67,8 @@ h1 {
 	-webkit-text-stroke-color: var(--white);
 	line-height: 1.2;
 	opacity: .9;
+}
+
 .subheading {
 	font-size: clamp(1rem, 0.95rem + 0.75vw, 2rem);
 	font-weight: 500;
@@ -93,15 +95,15 @@ main {
 }
 
 footer {
-	margin-top: 1.2rem;
+	margin-block: 3vh;
 	text-align: center;
-	opacity: .7;
+	opacity: .75;
 
 	p {
 		display: inline-block;
-		font-size: .85rem;
-		margin: .7rem 2rem;
-		max-width: 70%;
+		font-size: clamp(0.7rem, 0.6em + .8vw, .9rem);
+		margin-block: 0.9rem 0;
+		margin-inline: var(--inlines-padding-margins);
 	}
 	hr {
 		border: none;
@@ -145,6 +147,8 @@ label {
 	width: 4rem;
 	opacity: .75;
 	box-sizing: border-box;
+}
+
 #input-box {
 	display: flex;
 	flex-wrap: wrap;
@@ -310,50 +314,6 @@ span.line {
 	#lyrics-el {
 		line-height: 1.5;
 	}
-	footer {
-		margin: .8rem auto 0.25rem auto;
-		p {
-			font-size: .9rem;
-			line-height: 1.42;
-			margin: .55rem 1rem .45rem 1rem;
-		}
-		hr {
-			border: none;
-			border-top: 1px solid var(--white);
-			margin: 0 auto;
-		}
-	}
-
-	.footer-top-line {
-		width: 80%;
-		margin: auto;
-	}
-
-	.footer-bottom-line {
-		margin-top: 4px;
-		width: 76%;
-	}
-}
-
-/* ===================== SMALLER PHONE ==================== */
-@media (min-width:391px) and (max-width:430px) {
-	h1 {
-		font-size: 2.9rem;
-	}
-}
-
-/* ===================== TINY PHONE ==================== */
-@media (max-width:390.99px) {
-	.color-band {
-		padding-inline: .5rem;
-	}
-	h1 {
-		font-size: 2.4rem;
-	}
-
-	main {
-		margin-inline: .5rem;
-	}
 
 	#lyrics-el {
 		padding-inline: .5rem;
@@ -361,7 +321,6 @@ span.line {
 
 	footer p {
 		font-size: .8rem;
-		max-width: 85%;
 		margin-bottom: .15rem;
 	}
 

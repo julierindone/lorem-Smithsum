@@ -13,7 +13,7 @@ export async function handler(event) {
 
 		//convert into usable text
 		let songTitle = $('title').text();
-		let rawLyrics = $('div.none').html();
+		let rawLyrics = $('div.content div').html();
 
 		// Add Access Control to headers & return rawLyrics string
 		return {

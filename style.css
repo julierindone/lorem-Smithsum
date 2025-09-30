@@ -129,10 +129,6 @@ footer {
 	max-width: 400px;
 }
 
-.word-count-input-container * {
-	font-weight: 600;
-}
-
 #word-count-input {
 	font-size: clamp(0.95rem, .9rem + 0.29vw, 1.2rem);
 	color: var(--dark-ice-blue);
@@ -148,12 +144,13 @@ footer {
 	display: flex;
 	flex-wrap: wrap;
 	gap: .5rem;
+	font-weight: 500;
 	align-items: center;
 }
 
 #input-box label {
 	opacity: .9;
-	font-weight: 500;
+	text-shadow: 0 0 1px black;
 }
 
 #word-count-input:focus {
@@ -179,6 +176,7 @@ button {
 	border: 1px solid #58828f;
 	border-radius: 7px;
 	box-shadow: 3px 3px #578390a8;
+	text-shadow: 0 0 1px black;
 	padding-block: .4em .5em;
 	padding-inline: .65em;
 	margin-right: .2em; /* margin-right value is so the shadow doesn't get cut off. */
@@ -259,7 +257,7 @@ button:active {
 		scrollbar-width: none;  /* Firefox */
 		-ms-overflow-style: none;  /* IE and Edge */
 	}
-	#lyrics-box::--webkit-scrollbar {  /* Chrome */
+	#lyrics-box::-webkit-scrollbar {  /* Chrome */
 		width: 0;
 		background: transparent;
 	}

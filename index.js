@@ -12,14 +12,14 @@ let songList = []
 let songWordCount = 0
 let rawLyrics = ''
 
-// // // // // // // // // // //  EVENT LISTENERS  // // // // // // // // // // // 
+// // // // // // // // // // //  EVENT LISTENERS  // // // // // // // // // // //
 
 // Get list of all songs by the Smiths as soon as the page loads
 document.addEventListener("DOMContentLoaded", async () => {
 	await getSongList();
 })
 
-// Clear input and related error messages upon focus on word count input box 
+// Clear input and related error messages upon focus on word count input box
 wordCountInputEl.addEventListener('focus', () => {
 	clearInput()
 })
@@ -28,7 +28,7 @@ wordCountForm.addEventListener('submit', (event) => {
 	event.preventDefault()
 	numWordsToGet = Number(wordCountInputEl.value.trim())
 	// if there are non-digits, too many words, or the number is 0...
-	if (/\D/.test(numWordsToGet) || numWordsToGet > 5000 || numWordsToGet === 0) {
+	if (/\D/.test(numWordsToGet) || numWordsToGet > 5000 || numWordsToGet == 0) {
 		errorMessageEl.innerHTML = "<p>Please enter a number between 1 and 5000.</p>"
 	}
 	else {
@@ -38,7 +38,7 @@ wordCountForm.addEventListener('submit', (event) => {
 
 copyBtnEl.addEventListener('click', copyLyricsToClipboard)
 
-// // // // // // // // // // //  GENERATE & DISPLAY CONTENT  // // // // // // // // // // // 
+// // // // // // // // // // //  GENERATE & DISPLAY CONTENT  // // // // // // // // // // //
 
 async function generateLoremSmithsum() {
 	try {
@@ -65,7 +65,7 @@ function displayLyrics() {
 	toggleDisplayState("block")
 }
 
-// // // // // // // // // // //  DATA SERVICE FUNCTIONS  // // // // // // // // // // // 
+// // // // // // // // // // //  DATA SERVICE FUNCTIONS  // // // // // // // // // // //
 
 async function getSongList() {
 	const response = await fetch('/.netlify/functions/getSongs')
@@ -110,7 +110,7 @@ function copyLyricsToClipboard() {
 	alert("lorem smithsum has been copied to your clipboard.")
 }
 
-// // // // // // // // // // //   FORMATTING FUNCTIONS   // // // // // // // // // // // 
+// // // // // // // // // // //   FORMATTING FUNCTIONS  // // // // // // // // // // //
 
 function formatLyrics() {
 	//  Get rid of any music symbols & extra spaces
@@ -248,12 +248,14 @@ function cutToWordCount(refinedParagraphs) {
 	return songArray.join(' ');
 }
 
-// Do last bits of formatting on entire lyrics string. 
+// Do last bits of formatting on entire lyrics string.
 function assembleLyrics() {
+	let endBreaks = /(\s*<[^>]+>\s*){2}$/
 	let endPunctuation = /([:;,!?]*)(["'])?$/
 
 	// Change non-period end punctuation to elipses on last sentence.
-	return lyrics.replace(endPunctuation, '...')
+	return lyrics.replace(endBreaks, '') // remove break tags after very last line
+	.replace(endPunctuation, '...')
 }
 
 // // // // // // // // // // // //  HELPER FUNCTIONS   // // // // // // // // // // // //

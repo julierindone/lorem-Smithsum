@@ -53,29 +53,32 @@ body, html {
 	background-color: var(--trans-ice-blue);
 	display: flex;
 	flex-direction: column;
-	margin-block: clamp(0.9rem, 0.7em + 1.9vw, 2em) .3em;
-	padding-block: clamp(0.7rem, 0.45em + 1.5vw, 2em);
+	margin-block: clamp(1rem, 0.6em + 1.9vw, 2em) .3em;
+	padding-block: clamp(0.9rem, 0.55em + 2.6vw, 2em);
 	padding-inline: var(--inline-padding-margins);
-}
 
-h1 {
-	font-size: clamp(2rem, 1.8rem + 3.3vw, 6rem);
-	word-spacing: 4px;
-	letter-spacing: -1px;
-	-webkit-text-stroke-width: .5px;
-	-webkit-text-stroke-color: var(--white);
-	line-height: 1.15;
-	opacity: .9;
-	text-wrap: balance;
-}
+	> * {
+		text-align: center;
+	}
 
-.subheading {
-	font-size: clamp(1rem, 0.95rem + 0.75vw, 2rem);
-	font-weight: 500;
-	letter-spacing: -.32px;
-	word-spacing: 1.25px;
-	padding-left: .25em;
-	margin-block: .1em 0; /* Leave as rem - otherwise it's too stretched out on wider screens. */
+	h1 {
+		font-size: clamp(1px, 6vw, 4rem);
+		font-weight: 750;
+		letter-spacing: 1.5px;
+		word-spacing: 3px;
+		line-height: 1.25;
+		text-wrap: balance;
+		-webkit-text-stroke-width: .5px;
+		-webkit-text-stroke-color: var(--white);
+	}
+
+	.subheading {
+		font-size: clamp(1.1rem, 0.82rem + 0.95vw, 2.2rem);
+		font-weight: 500;
+		word-spacing: 1.25px;
+		padding-left: .25em;
+		margin-top: .15em;
+	}
 }
 
 main {
@@ -149,6 +152,7 @@ footer {
 }
 
 #input-box label {
+	font-size: .95em;
 	opacity: .9;
 	text-shadow: 0 0 1px black;
 }
@@ -176,7 +180,7 @@ button {
 	border: 1px solid #58828f;
 	border-radius: 7px;
 	box-shadow: 3px 3px #578390a8;
-	text-shadow: 0 0 1px black;
+	text-shadow: 0 0 1px var(--dark-ice-blue);
 	padding-block: .4em .5em;
 	padding-inline: .65em;
 	margin-right: .2em; /* margin-right value is so the shadow doesn't get cut off. */
@@ -227,7 +231,7 @@ button:active {
 
 #lyrics-el {
 	color: var(--dark-ice-blue);
-	line-height: 1.5;
+	line-height: 1.6;
 	padding-inline: .75em;
 	font-size: var(--main-font-size);
 }
@@ -261,14 +265,21 @@ button:active {
 		width: 0;
 		background: transparent;
 	}
-
-	#lyrics-el {
-		line-height: 1.5;
-	}
 }
 
-/* This will be the smallest size to keep and will be the base css if I rewrite. */
 @media (max-width: 500px) {
+	.color-band {
+		> * {
+			text-align: left;
+		}
+
+		h1 {
+			/* TODO: This is more similar font size that was previously set for ALL screen sizes. I didn't try the new one out with smaller screens yet But I liked the left-aligned one better for smaller screens...*/
+			font-size: clamp(1.6rem, 1rem + 5.65vw, 2.6rem);
+			letter-spacing: 2px;
+		}
+	}
+
 	.word-count-input-container {
 		justify-content: space-between;
 		max-width: unset;

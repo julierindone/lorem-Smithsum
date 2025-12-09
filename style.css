@@ -5,8 +5,8 @@
 	--ice-blue: #78a2b0;
 	--trans-ice-blue: #78a2b0a1;
 	--dark-ice-blue: #275666;
-	--inline-padding-margins: clamp(0.7em, 0.4em + 1.4vw, 3.5em);
-	--main-font-size: clamp(0.95rem, .95rem + 0.15vw, 1.2rem);
+	--small-text: clamp(0.95rem, 0.852rem + 0.465vw, 1.05rem);
+	--inline-padding-margins: clamp(0.7em, 0.4em + 1.9vw, 3.5em);
 }
 
 /* Base sizing: (min-width:626px) and (max-width:1250px) */
@@ -58,10 +58,12 @@ main, footer {
 	display: flex;
 	flex-direction: column;
 	margin-block: clamp(1rem, 0.6em + 1.9vw, 2em) .3em;
-	padding-block: clamp(0.9rem, 0.55em + 2.6vw, 2em);
+	padding-block: clamp(0.9rem, 0.5em + 2.4vw, 1.9em);
 	padding-inline: var(--inline-padding-margins);
+	backdrop-filter: blur(3px);
 
 	> * {
+		max-width: 1010px;
 		text-align: center;
 	}
 
@@ -74,6 +76,7 @@ main, footer {
 		text-wrap: balance;
 		-webkit-text-stroke-width: .5px;
 		-webkit-text-stroke-color: var(--white);
+		max-width: 1000px;
 	}
 
 	.subheading {
@@ -81,7 +84,7 @@ main, footer {
 		font-weight: 500;
 		word-spacing: 1.25px;
 		padding-left: .25em;
-		margin-top: .15em;
+		margin-top: .125em;
 	}
 }
 
@@ -94,7 +97,7 @@ main {
 }
 
 footer {
-	margin-block: 2vh;
+	margin-block: 2.2vh;
 	opacity: .75;
 
 	p {
@@ -107,24 +110,23 @@ footer {
 	hr {
 		border: none;
 		border-top: 1px solid var(--white);
-		margin: 0 auto;
-	}
+		margin-block: 0;
 }
 
 .footer-top-line {
-	width: 80%;
-	margin: auto;
+		width: 90%;
 }
 
 .footer-bottom-line {
-	margin-top: 5px;
-	width: 76%;
+		margin-top: 0.4em;
+		width: 82%;
+	}
 }
 
 .word-count-input-container {
 	display: flex;
 	flex-wrap: wrap;
-	gap: .5em 2em;
+  align-items: center;
 	margin-top: clamp(0.6em, 0.4em + .7vw, 1.2em);
 	max-width: 400px;
 }
@@ -137,15 +139,15 @@ footer {
 	opacity: .75;
 	box-sizing: border-box;
 	border-radius: 5px;
-	padding: .3em;
+	padding-block: 0.13em;
 }
 
 #input-box {
 	display: flex;
-	flex-wrap: wrap;
-	gap: .5rem;
-	font-weight: 500;
-	align-items: center;
+	gap: 0.6em;
+	flex: 1 1 auto;
+	font-size: 1.07em;
+	align-items: baseline;
 }
 
 #input-box label {

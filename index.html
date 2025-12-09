@@ -4,47 +4,48 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="style.css">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda+SC:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&display=swap" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="reset.css">
+	<link rel="stylesheet" href="style.css">
 	<title>The World Won't Ipsum</title>
 </head>
 
-<body class="open-sans-smiths">
-	<div id="wrapper" class="rocker-boys" aria-label="Youth at a fair - Jürgen Vollmer, 'Rock 'N' Roll Times: The Style and Spirit of the Early Beatles and Their First Fans'">
-		<header id="header">
-			<div class="bodoni-moda-sc color-band">
-				<h1>THE WORLD WON'T LIPSUM
-				</h1>
-				<p class="subheading open-sans-smiths">lorem ipsum for fans of the smiths</p>
-			</div>
-		</header>
-		<main>
-			<div id="error-message"></div>
-			<form id="word-count-form" novalidate>
-				<div class="word-count-input-container">
-					<div id="input-box">
-						<label for="word-count-input">enter word count:</label>
-						<input type="number" id="word-count-input" min="1" max="5000" placeholder="200" autocomplete="off"></input>
-					</div>
-					<button type="submit" id="generate-smithsum-btn">generate text</button>
+<body class="open-sans-smiths rocker-boys" aria-label="Youth at a fair - Jürgen Vollmer, 'Rock 'N' Roll Times: The Style and Spirit of the Early Beatles and Their First Fans'">
+	<header id="header">
+		<div class="bodoni-moda-sc color-band">
+			<h1>THE WORLD WON'T LIPSUM
+			</h1>
+			<p class="subheading open-sans-smiths">lorem ipsum for fans of the smiths</p>
+		</div>
+	</header>
+	<main>
+		<div id="error-message"></div>
+		<form id="word-count-form" novalidate>
+			<div class="word-count-input-container">
+				<div id="input-box">
+					<label for="word-count-input">enter word count:</label>
+					<input type="number" id="word-count-input" min="1" max="5000" placeholder="200" autocomplete="off"></input>
 				</div>
-			</form>
-			<div class="lyrics-container">
-				<div id="lyrics-box"></div>
-				<button id="copy-btn">copy lyrics</button>
+				<button type="submit" id="generate-smithsum-btn">generate text</button>
 			</div>
-		</main>
-		<footer id="footer">
-			<hr class="footer-top-line">
-			<hr class="footer-bottom-line">
-			<p>
-				All lyrics are credited to the greatest band in the history of music, The&nbsp;Smiths.
-			</p>
-		</footer>
-	</div>
+		</form>
+		<div id="lyrics-container">
+			<div id="lyrics-box">
+				<p id="lyrics-el"></p>
+			</div>
+			<button id="copy-btn">copy lyrics</button>
+		</div>
+	</main>
+	<footer id="footer">
+		<hr class="footer-top-line">
+		<hr class="footer-bottom-line">
+		<p>
+			All lyrics are credited to the greatest band in the history of music, The&nbsp;Smiths.
+		</p>
+	</footer>
 	<script src="index.js" type="module"></script>
 </body>
 

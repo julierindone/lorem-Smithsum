@@ -1,23 +1,34 @@
 :root {
 	--white: #fbfbfb;
+	--trans-white: #fbfbfb70;
 	--dark-gray: #2f2f2f;
 	--ice-blue: #78a2b0;
 	--trans-ice-blue: #78a2b0a1;
-	--dark-ice-blue: #397487;
-	--inline-padding-margins: clamp(0.7em, 0.4em + 1.4vw, 3.5em);
-	--main-font-size: clamp(0.95rem, .95rem + 0.15vw, 1.2rem);
+	--dark-ice-blue: #275666;
+	--small-text: clamp(0.95rem, 0.852rem + 0.465vw, 1.05rem);
+	--inline-padding-margins: clamp(0.7em, 0.4em + 1.9vw, 3.5em);
 }
 
 /* Base sizing: (min-width:626px) and (max-width:1250px) */
-html, body, h1, p {
-	margin: 0;
-	padding: 0;
+html {
+	height: 100dvh;
+	scrollbar-color: var(--ice-blue) var(--trans-white);
 }
 
-body, html {
+body {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
 	background-color: var(--dark-gray);
 	color: var(--white);
-	height: 100%;
+}
+
+body, h1, p, .subheading, main, footer {
+	margin: 0 auto;
+}
+
+main, footer {
+	width: min(100%, 975px);
 }
 
 .bodoni-moda-sc {
@@ -28,15 +39,8 @@ body, html {
 .open-sans-smiths {
 	font-family: "Open Sans", sans-serif;
 	font-optical-sizing: auto;
-	font-variation-settings:
-		"wdth" 100;
-}
-
-#wrapper {
-	margin: 0 auto;
-	display: flex;
-	flex-direction: column;
-	height: 100dvh;
+	font-variation-settings: "wdth" 100;
+	letter-spacing: .012em;
 }
 
 .rocker-boys {
@@ -54,31 +58,37 @@ body, html {
 	display: flex;
 	flex-direction: column;
 	margin-block: clamp(1rem, 0.6em + 1.9vw, 2em) .3em;
-	padding-block: clamp(0.9rem, 0.55em + 2.6vw, 2em);
+	padding-block: clamp(0.9rem, 0.5em + 2.4vw, 1.9em);
 	padding-inline: var(--inline-padding-margins);
+	backdrop-filter: blur(3px);
 
 	> * {
+		max-width: 1010px;
 		text-align: center;
 	}
 
 	h1 {
-		font-size: clamp(1px, 6vw, 4rem);
+		font-size: clamp(1px, 6.2vw, 4rem);
 		font-weight: 750;
-		letter-spacing: 1.5px;
-		word-spacing: 3px;
-		line-height: 1.25;
+		word-spacing: 0.08em;
+		line-height: 1.22;
 		text-wrap: balance;
 		-webkit-text-stroke-width: .5px;
 		-webkit-text-stroke-color: var(--white);
+		max-width: 1000px;
 	}
 
 	.subheading {
-		font-size: clamp(1.1rem, 0.82rem + 0.95vw, 2.2rem);
-		font-weight: 500;
+		font-size: clamp(1rem, 0.6rem + 1.95vw, 1.7rem);
+		font-weight: 375;
 		word-spacing: 1.25px;
 		padding-left: .25em;
-		margin-top: .15em;
+		margin-top: .125em;
 	}
+}
+
+#error-message, .word-count-input-container, button {
+	font-size: var(--small-text);
 }
 
 main {
@@ -86,75 +96,82 @@ main {
 	flex-direction: column;
 	flex-grow: 1;
 	overflow-y: auto;
-	margin-inline: var(--inline-padding-margins);
-}
-
-.lyrics-container {
-	display: flex;
-	flex-direction: column;
-	flex-grow: 1;
-	overflow-y: auto;
+	padding-inline: calc(1.2 * var(--inline-padding-margins));
 }
 
 footer {
-	margin-block: 2vh;
+	margin-block: 2.2vh;
 	opacity: .75;
 
 	p {
-		font-size: clamp(0.7rem, 0.6em + .8vw, .9rem);
-		text-wrap-style: balance;
+		font-size: calc(.82 * var(--small-text));
+		text-wrap-style: pretty;
 		text-align: center;
-		margin-block: 1.2rem 0;
-		margin-inline: var(--inline-padding-margins);
+		width: min(78%, 800px);
+		margin-top: 0.7em;
+		line-height: 1.5;
 	}
+
 	hr {
 		border: none;
 		border-top: 1px solid var(--white);
-		margin: 0 auto;
+		margin-block: 0;
 	}
-}
 
-.footer-top-line {
-	width: 80%;
-	margin: auto;
-}
+	.footer-top-line {
+		width: 90%;
+	}
 
-.footer-bottom-line {
-	margin-top: 5px;
-	width: 76%;
+	.footer-bottom-line {
+		margin-top: 0.4em;
+		width: 82%;
+	}
 }
 
 .word-count-input-container {
 	display: flex;
 	flex-wrap: wrap;
-	gap: .5em 2em;
+  align-items: center;
 	margin-top: clamp(0.6em, 0.4em + .7vw, 1.2em);
-	max-width: 400px;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+	margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
 }
 
 #word-count-input {
-	font-size: clamp(0.95rem, .9rem + 0.29vw, 1.2rem);
-	color: var(--dark-ice-blue);
+	color: #154e60;
+	font-weight: 550;
 	text-align: center;
 	width: 4em;
-	opacity: .75;
-	box-sizing: border-box;
+	background-color: var(--trans-white);
+	backdrop-filter: blur(6px);
 	border-radius: 5px;
-	padding: .3em;
+	border-color: var(--dark-ice-blue);
+	padding-block: 0.13em;
 }
 
 #input-box {
 	display: flex;
-	flex-wrap: wrap;
-	gap: .5rem;
-	font-weight: 500;
-	align-items: center;
+	gap: 0.6em;
+	flex: 1 1 auto;
+	font-size: 1.07em;
+	align-items: baseline;
 }
 
 #input-box label {
-	font-size: .95em;
-	opacity: .9;
+	opacity: .95;
 	text-shadow: 0 0 1px black;
+	background-color: #00000010;
+	backdrop-filter: blur(4px);
 }
 
 #word-count-input:focus {
@@ -162,34 +179,27 @@ footer {
 }
 
 ::placeholder {
-	color: var(--ice-blue);
+	color: var(--dark-ice-blue);
+	font-size: 1.05em;
 	opacity: .7;
 }
 
 :focus::placeholder {
-	opacity: .55;
+	opacity: .8;
 }
 
 button {
-	background-color: #85b2c2d9;
+	background-color: var(--trans-ice-blue);
 	color: var(--white);
 	font-family: "Open Sans", sans-serif;
-	font-size: clamp(.8rem, .78rem + .4vw, 1rem);
-	font-weight: 500;
+	font-size: calc(1.1 * var(--small-text));
+	font-weight: 550;
 	word-spacing: 1px;
+	text-shadow: 0.5px 0.5px 1px var(--dark-ice-blue);
 	border: 1px solid #58828f;
 	border-radius: 7px;
-	box-shadow: 3px 3px #578390a8;
-	text-shadow: 0 0 1px var(--dark-ice-blue);
-	padding-block: .4em .5em;
-	padding-inline: .65em;
-	margin-right: .2em; /* margin-right value is so the shadow doesn't get cut off. */
-}
-
-#copy-btn {
-	align-self: flex-end;
-	display: none;
-	margin-bottom: 0.2em;
+	box-shadow: 3px 3px 1px #173a45;
+	padding: 0.5em 1em 0.65em 1em;
 }
 
 @media (hover: hover) {
@@ -207,48 +217,59 @@ button:active {
 }
 
 #error-message p {
-	font-size: clamp(0.9rem, .85rem + 0.25vw, 1.2rem);
-	color: #ff5d75;
-	text-shadow: 0 0 .75px black;
-	background-color: #3e3e3eb0;
+	font-size: 1.05em;
+	color: #ff3c59;
+	font-weight: 500;
+	text-shadow: 0 0 1px black;
 	display: inline-block;
-	margin-block: .8rem 0;
+	backdrop-filter: blur(5px);
 	padding: .06rem .05rem .06rem 0;
-	border-radius: 2px;
+	margin-block: .8rem 0;
 }
 
-/* TODO: Add a smoother transition when displaying the lyrics. */
-#lyrics-box {
-	display: none;
-	opacity: .85;
+#lyrics-container {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
 	overflow-y: auto;
-	background-color: var(--white);
-	/* Hacky fix for weird issue with corners. Remove if it's making things worse! Should obly be needed for 625pc since i think it has something to do with the scrollbar. */
-	border-block: solid .65rem var(--white);
+	opacity: 0;
+	transition: opacity .25s 0s ease-out;
+	> #copy-btn {
+		display: none;
+		flex: 1 1 auto;
+		align-self: flex-end;
+		margin-right: 0.2em;
+		margin-bottom: 0.2em;
+	}
+	&.fade-in {
+		opacity: .85;
+		transition: opacity .3s 0s ease-in;
+	}
+}
+
+#lyrics-box {
+	overflow-y: auto;
+	background-color: var(--trans-white);
+	border-block: solid 0.5em var(--trans-white);
 	border-inline: solid 1px #00000000;
 	margin-block: 1em;
 }
 
 #lyrics-el {
 	color: var(--dark-ice-blue);
-	line-height: 1.6;
-	padding-inline: .75em;
-	font-size: var(--main-font-size);
+	font-weight: 525;
+	line-height: 1.55;
+	letter-spacing: normal;
+	backdrop-filter: blur(6px);
+	padding-inline: .8em;
 }
 
 /* ================================================= */
 /* ================= MEDIA QUERIES ================= */
 /* ================================================= */
 
-/* ===================== DESKTOP =================== */
-@media (min-width:1251px) {
-	main {
-			margin-inline: 3rem;
-		}
-}
 
-/* ===================== PHONE ==================== */
-@media (max-width:625px) {
+@media (max-width: 500px) {
 	html {
 		overflow: scroll;
 	}
@@ -257,56 +278,40 @@ button:active {
 		background-position: right;
 	}
 
-	#lyrics-box {
-		scrollbar-width: none;  /* Firefox */
-		-ms-overflow-style: none;  /* IE and Edge */
-	}
-	#lyrics-box::-webkit-scrollbar {  /* Chrome */
-		width: 0;
-		background: transparent;
-	}
-}
-
-@media (max-width: 500px) {
 	.color-band {
 		> * {
 			text-align: left;
 		}
 
 		h1 {
-			/* TODO: This is more similar font size that was previously set for ALL screen sizes. I didn't try the new one out with smaller screens yet But I liked the left-aligned one better for smaller screens...*/
-			font-size: clamp(1.6rem, 1rem + 5.65vw, 2.6rem);
-			letter-spacing: 2px;
+			font-size: clamp(1.9rem, 0.3rem + 8.3vw, 2.6rem);
+			letter-spacing: 0.04em;
+		}
+
+		.subheading {
+			margin-left: 0;
 		}
 	}
 
 	.word-count-input-container {
-		justify-content: space-between;
-		max-width: unset;
-	}
-}
+		#input-box {
+			justify-content: space-between;
+		}
 
-/* ===================== SMALL PHONE ==================== */
-
-@media (max-width:390px) {
-
-	#lyrics-el {
-	line-height: 1.55;
-	padding-inline: .7em;
+		button {
+			width: 100%;
+			margin-top: 1em;
+			margin-left: unset;
+		}
 	}
 
-	footer p {
-		font-size: .8rem;
-		margin-bottom: .15rem;
+	#lyrics-box {
+		scrollbar-width: none;  /* Firefox */
+		-ms-overflow-style: none;  /* IE and Edge */
 	}
 
-	.footer-top-line {
-		width: 92%;
-		margin: auto;
-	}
-
-	.footer-bottom-line {
-		margin-top: 4px;
-		width: 90%;
+	#lyrics-box::-webkit-scrollbar {  /* Chrome */
+		width: 0;
+		background: transparent;
 	}
 }

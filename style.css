@@ -1,9 +1,10 @@
 :root {
 	--white: #fbfbfb;
+	--trans-white: #fbfbfb70;
 	--dark-gray: #2f2f2f;
 	--ice-blue: #78a2b0;
 	--trans-ice-blue: #78a2b0a1;
-	--dark-ice-blue: #397487;
+	--dark-ice-blue: #275666;
 	--inline-padding-margins: clamp(0.7em, 0.4em + 1.4vw, 3.5em);
 	--main-font-size: clamp(0.95rem, .95rem + 0.15vw, 1.2rem);
 }
@@ -89,14 +90,7 @@ main {
 	flex-direction: column;
 	flex-grow: 1;
 	overflow-y: auto;
-	margin-inline: var(--inline-padding-margins);
-}
-
-.lyrics-container {
-	display: flex;
-	flex-direction: column;
-	flex-grow: 1;
-	overflow-y: auto;
+	padding-inline: calc(1.2 * var(--inline-padding-margins));
 }
 
 footer {
@@ -182,17 +176,7 @@ button {
 	word-spacing: 1px;
 	border: 1px solid #58828f;
 	border-radius: 7px;
-	box-shadow: 3px 3px #578390a8;
-	text-shadow: 0 0 1px var(--dark-ice-blue);
-	padding-block: .4em .5em;
-	padding-inline: .65em;
-	margin-right: .2em; /* margin-right value is so the shadow doesn't get cut off. */
-}
-
-#copy-btn {
-	align-self: flex-end;
-	display: none;
-	margin-bottom: 0.2em;
+	padding-inline: 1em;
 }
 
 @media (hover: hover) {
@@ -220,38 +204,49 @@ button:active {
 	border-radius: 2px;
 }
 
-/* TODO: Add a smoother transition when displaying the lyrics. */
-#lyrics-box {
-	display: none;
-	opacity: .85;
+#lyrics-container {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
 	overflow-y: auto;
-	background-color: var(--white);
-	/* Hacky fix for weird issue with corners. Remove if it's making things worse! Should obly be needed for 625pc since i think it has something to do with the scrollbar. */
-	border-block: solid .65rem var(--white);
+	opacity: 0;
+	transition: opacity .25s 0s ease-out;
+	> #copy-btn {
+		display: none;
+		flex: 1 1 auto;
+		align-self: flex-end;
+		margin-right: 0.2em;
+		margin-bottom: 0.2em;
+	}
+	&.fade-in {
+		opacity: .85;
+		transition: opacity .3s 0s ease-in;
+	}
+}
+
+#lyrics-box {
+	overflow-y: auto;
+	background-color: var(--trans-white);
+	border-block: solid 0.5em var(--trans-white);
 	border-inline: solid 1px #00000000;
 	margin-block: 1em;
 }
 
 #lyrics-el {
 	color: var(--dark-ice-blue);
-	line-height: 1.6;
-	padding-inline: .75em;
-	font-size: var(--main-font-size);
+	font-weight: 525;
+	line-height: 1.55;
+	letter-spacing: normal;
+	backdrop-filter: blur(6px);
+	padding-inline: .8em;
 }
 
 /* ================================================= */
 /* ================= MEDIA QUERIES ================= */
 /* ================================================= */
 
-/* ===================== DESKTOP =================== */
-@media (min-width:1251px) {
-	main {
-			margin-inline: 3rem;
-		}
-}
 
-/* ===================== PHONE ==================== */
-@media (max-width:625px) {
+@media (max-width: 500px) {
 	html {
 		overflow: scroll;
 	}
@@ -260,56 +255,40 @@ button:active {
 		background-position: right;
 	}
 
-	#lyrics-box {
-		scrollbar-width: none;  /* Firefox */
-		-ms-overflow-style: none;  /* IE and Edge */
-	}
-	#lyrics-box::-webkit-scrollbar {  /* Chrome */
-		width: 0;
-		background: transparent;
-	}
-}
-
-@media (max-width: 500px) {
 	.color-band {
 		> * {
 			text-align: left;
 		}
 
 		h1 {
-			/* TODO: This is more similar font size that was previously set for ALL screen sizes. I didn't try the new one out with smaller screens yet But I liked the left-aligned one better for smaller screens...*/
-			font-size: clamp(1.6rem, 1rem + 5.65vw, 2.6rem);
-			letter-spacing: 2px;
+			font-size: clamp(1.9rem, 0.3rem + 8.3vw, 2.6rem);
+			letter-spacing: 0.04em;
+		}
+
+		.subheading {
+			margin-left: 0;
 		}
 	}
 
 	.word-count-input-container {
+		#input-box {
 		justify-content: space-between;
-		max-width: unset;
-	}
-}
+		}
 
-/* ===================== SMALL PHONE ==================== */
-
-@media (max-width:390px) {
-
-	#lyrics-el {
-	line-height: 1.55;
-	padding-inline: .7em;
+		button {
+			width: 100%;
+			margin-top: 1em;
+			margin-left: unset;
+		}
 	}
 
-	footer p {
-		font-size: .8rem;
-		margin-bottom: .15rem;
+	#lyrics-box {
+		scrollbar-width: none;  /* Firefox */
+		-ms-overflow-style: none;  /* IE and Edge */
 	}
 
-	.footer-top-line {
-		width: 92%;
-		margin: auto;
-	}
-
-	.footer-bottom-line {
-		margin-top: 4px;
-		width: 90%;
+	#lyrics-box::-webkit-scrollbar {  /* Chrome */
+		width: 0;
+		background: transparent;
 	}
 }

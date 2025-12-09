@@ -1,7 +1,7 @@
 const wordCountForm = document.getElementById('word-count-form')
 const wordCountInputEl = document.getElementById('word-count-input')
-const generateSmithsumBtnEl = document.getElementById('generate-smithsum-btn')
-const lyricsBoxEl = document.getElementById('lyrics-box')
+const lyricsContainer = document.getElementById('lyrics-container')
+const lyricsEl = document.getElementById('lyrics-el')
 const errorMessageEl = document.getElementById('error-message')
 const copyBtnEl = document.getElementById('copy-btn')
 
@@ -58,11 +58,10 @@ async function generateLoremSmithsum() {
 }
 
 function displayLyrics() {
-	const lyricsEl = document.createElement("p")  // create lyrics element
-	lyricsEl.id = 'lyrics-el'
+	copyBtnEl.style.display = 'unset'
+	lyricsEl.innerHTML = ''
 	lyricsEl.innerHTML = assembleLyrics();
-	lyricsBoxEl.appendChild(lyricsEl)  // add element to the div
-	toggleDisplayState("block")
+	lyricsContainer.classList.add('fade-in')
 }
 
 // // // // // // // // // // //  DATA SERVICE FUNCTIONS  // // // // // // // // // // //
@@ -139,6 +138,7 @@ function removeJunk() {
 	const startEndTags = /^(\s*<[^>]+>\s*)+|(\s*<[^>]+>\s*)+$/g;  // Remove any tags or spaces found at start/end
 	const spaceAroundTags = /\s*(<[^>]+>)\s*/g  // Remove extra spaces before/after tags
 	const spaceBeforePunctuation = /\s([:?.,!]+)/g
+	// TODO: Add back in, or delete var
 	const spaceAfterPunctuation = /([?.,!]+)\s/g
 
 	return rawLyrics.replace(musicNoteFix, '')
@@ -260,10 +260,6 @@ function assembleLyrics() {
 
 // // // // // // // // // // // //  HELPER FUNCTIONS   // // // // // // // // // // // //
 
-function toggleDisplayState(displayState) {
-	lyricsBoxEl.style.display = displayState;
-	copyBtnEl.style.display = displayState;
-}
 
 function clearInput() {
 	errorMessageEl.innerHTML = ''
@@ -271,10 +267,9 @@ function clearInput() {
 }
 
 function resetLyrics() {
+	lyricsContainer.classList.remove('fade-in')
 	songWordCount = 0;
 	lyrics = '';
-	lyricsBoxEl.innerHTML = ''
-	toggleDisplayState("none")
 }
 
 function pickSongId(songList) {

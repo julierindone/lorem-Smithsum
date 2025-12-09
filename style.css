@@ -9,15 +9,25 @@
 }
 
 /* Base sizing: (min-width:626px) and (max-width:1250px) */
-html, body, h1, p {
-	margin: 0;
-	padding: 0;
+html {
+	height: 100dvh;
+	scrollbar-color: var(--ice-blue) var(--trans-white);
 }
 
-body, html {
+body {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
 	background-color: var(--dark-gray);
 	color: var(--white);
-	height: 100%;
+}
+
+body, h1, p, .subheading, main, footer {
+	margin: 0 auto;
+}
+
+main, footer {
+	width: min(100%, 975px);
 }
 
 .bodoni-moda-sc {
@@ -28,15 +38,8 @@ body, html {
 .open-sans-smiths {
 	font-family: "Open Sans", sans-serif;
 	font-optical-sizing: auto;
-	font-variation-settings:
-		"wdth" 100;
-}
-
-#wrapper {
-	margin: 0 auto;
-	display: flex;
-	flex-direction: column;
-	height: 100dvh;
+	font-variation-settings: "wdth" 100;
+	letter-spacing: .012em;
 }
 
 .rocker-boys {

@@ -1,10 +1,10 @@
 :root {
 	--white: #fbfbfb;
-	--trans-white: #fbfbfb70;
+	--trans-white: #fbfbfb75;
 	--dark-gray: #2f2f2f;
 	--ice-blue: #78a2b0;
 	--trans-ice-blue: #78a2b0a1;
-	--dark-ice-blue: #275666;
+	--dark-ice-blue: #154e60;
 	--small-text: clamp(0.95rem, 0.852rem + 0.465vw, 1.05rem);
 	--inline-padding-margins: clamp(0.7em, 0.4em + 1.9vw, 3.5em);
 }
@@ -60,7 +60,7 @@ main, footer {
 	margin-block: clamp(1rem, 0.6em + 1.9vw, 2em) .3em;
 	padding-block: clamp(0.9rem, 0.5em + 2.4vw, 1.9em);
 	padding-inline: var(--inline-padding-margins);
-	backdrop-filter: blur(3px);
+	backdrop-filter: blur(2px);
 
 	> * {
 		max-width: 1010px;
@@ -101,15 +101,19 @@ main {
 
 footer {
 	margin-block: 2.2vh;
-	opacity: .75;
+
+	.footer-text-div {
+		width: min(78%, 800px);
+		margin: 0.7em auto 0 auto;
+	}
 
 	p {
-		font-size: calc(.82 * var(--small-text));
-		text-wrap-style: pretty;
+		font-size: calc(.86 * var(--small-text));
 		text-align: center;
-		width: min(78%, 800px);
-		margin-top: 0.7em;
+		font-weight: 300;
 		line-height: 1.5;
+		backdrop-filter: blur(5px);
+		width: fit-content;
 	}
 
 	hr {
@@ -148,30 +152,32 @@ input[type=number] {
 }
 
 #word-count-input {
-	color: #154e60;
-	font-weight: 550;
+	color: var(--dark-ice-blue);
+	font-size: 1.2em;
+	font-weight: 600;
 	text-align: center;
-	width: 4em;
+	width: 5em;
 	background-color: var(--trans-white);
-	backdrop-filter: blur(6px);
+	backdrop-filter: blur(8px);
 	border-radius: 5px;
 	border-color: var(--dark-ice-blue);
-	padding-block: 0.13em;
+	height: 40px;
 }
 
 #input-box {
 	display: flex;
-	gap: 0.6em;
+	gap: 0.7em;
 	flex: 1 1 auto;
-	font-size: 1.07em;
-	align-items: baseline;
+	align-items: center;
 }
 
 #input-box label {
-	opacity: .95;
+	font-size: 1.15em;
+	font-weight: 350;
+	opacity: .92;
 	text-shadow: 0 0 1px black;
 	background-color: #00000010;
-	backdrop-filter: blur(4px);
+	backdrop-filter: blur(6px);
 }
 
 #word-count-input:focus {
@@ -180,12 +186,8 @@ input[type=number] {
 
 ::placeholder {
 	color: var(--dark-ice-blue);
-	font-size: 1.05em;
+	font-size: 1.075em;
 	opacity: .7;
-}
-
-:focus::placeholder {
-	opacity: .8;
 }
 
 button {
@@ -313,5 +315,9 @@ button:active {
 	#lyrics-box::-webkit-scrollbar {  /* Chrome */
 		width: 0;
 		background: transparent;
+	}
+
+	#lyrics-el {
+		font-size: 1.025rem;
 	}
 }

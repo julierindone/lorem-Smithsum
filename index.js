@@ -219,6 +219,7 @@ function pickingNits(refinedParagraphs) {
 	if (songToGet === '35105') {
 		refinedParagraphs = refinedParagraphs
 			.replace(/keats/g, 'Keats')
+			.replace(/yeats/g, 'Yeats')
 			.replace(/weird lover Wilde is on mine/i, 'Whale Blubber Wilde is on mine...')
 			.replace(/\(sugar\.\)./i, 'Sugar!')
 	}
@@ -226,8 +227,13 @@ function pickingNits(refinedParagraphs) {
 	else if (songToGet === '35109') {
 		refinedParagraphs = refinedParagraphs.replace(/[Dd]\.(\s?)[Jj]/g, 'DJ')
 	}
+
+	else if (songToGet === '13086') {
+		refinedParagraphs = refinedParagraphs.replace(/william/g, 'William')
+	}
 	return refinedParagraphs
 		.replace(upperCaseA, (match, c1, c2, c3) => `${c1}${c2}${c3.toLowerCase()}`)
+		.replace(/england/g, 'England')
 		.replace(mister, (match, c1, c2, c3, c4) => `${c1}${c2.toUpperCase()}${c3}.`)
 		.replace(needsSpace, ('$1 $2'))
 }

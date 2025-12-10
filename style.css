@@ -2,11 +2,13 @@
 	--white: #fbfbfb;
 	--trans-white: #fbfbfb75;
 	--dark-gray: #2f2f2f;
-	--ice-blue: #78a2b0;
 	--trans-ice-blue: #78a2b0a1;
+	--ice-blue: #78a2b0;
+	--medium-ice-blue: #4991a9;
 	--dark-ice-blue: #154e60;
-	--small-text: clamp(0.95rem, 0.852rem + 0.465vw, 1.05rem);
+	--small-text: clamp(0.9rem, 0.852rem + 0.465vw, 1.05rem);
 	--inline-padding-margins: clamp(0.7em, 0.4em + 1.9vw, 3.5em);
+	--top-margin: clamp(0.5em, -0.4em + 2.2vh, 1.2em);
 }
 
 /* Base sizing: (min-width:626px) and (max-width:1250px) */
@@ -57,8 +59,9 @@ main, footer {
 	background-color: var(--trans-ice-blue);
 	display: flex;
 	flex-direction: column;
-	margin-block: clamp(1rem, 0.6em + 1.9vw, 2em) .3em;
-	padding-block: clamp(0.9rem, 0.5em + 2.4vw, 1.9em);
+	/* TODO: Fix the units on margin & padding blocks. */
+	margin-block: clamp(0.9rem, 0.5em + 2vw, 2em) 0;
+	padding-block: clamp(0.9rem, 0.5em + 2.4vw, 2em);
 	padding-inline: var(--inline-padding-margins);
 	backdrop-filter: blur(2px);
 
@@ -79,7 +82,7 @@ main, footer {
 	}
 
 	.subheading {
-		font-size: clamp(1rem, 0.6rem + 1.95vw, 1.7rem);
+		font-size: clamp(0.8rem, 0.4rem + 2.5vw, 1.7rem);
 		font-weight: 375;
 		word-spacing: 1.25px;
 		padding-left: .25em;
@@ -100,17 +103,19 @@ main {
 }
 
 footer {
-	margin-block: 2.2vh;
+	--white: #fbfbfbb8;
+	margin-block: 2.2vh 1.7vh;
 
 	.footer-text-div {
 		width: min(78%, 800px);
-		margin: 0.7em auto 0 auto;
+		margin: 0.6em auto 0 auto;
 	}
 
 	p {
 		font-size: calc(.86 * var(--small-text));
+		color: var(--white);
+		font-weight: 350;
 		text-align: center;
-		font-weight: 300;
 		line-height: 1.5;
 		backdrop-filter: blur(5px);
 		width: fit-content;
@@ -136,7 +141,7 @@ footer {
 	display: flex;
 	flex-wrap: wrap;
   align-items: center;
-	margin-top: clamp(0.6em, 0.4em + .7vw, 1.2em);
+	margin-top: var(--top-margin);
 }
 
 /* Chrome, Safari, Edge, Opera */
@@ -152,13 +157,13 @@ input[type=number] {
 }
 
 #word-count-input {
-	color: var(--dark-ice-blue);
-	font-size: 1.2em;
+	color: var(--medium-ice-blue);
+	font-size: 1.25em;
 	font-weight: 600;
 	text-align: center;
 	width: 5em;
-	background-color: var(--trans-white);
-	backdrop-filter: blur(8px);
+	background-color: var(--white);
+	opacity: 0.8;
 	border-radius: 5px;
 	border-color: var(--dark-ice-blue);
 	height: 40px;
@@ -174,34 +179,33 @@ input[type=number] {
 #input-box label {
 	font-size: 1.15em;
 	font-weight: 350;
-	opacity: .92;
 	text-shadow: 0 0 1px black;
 	background-color: #00000010;
 	backdrop-filter: blur(6px);
 }
 
 #word-count-input:focus {
-	opacity: .8;
+	opacity: .72;
 }
 
 ::placeholder {
 	color: var(--dark-ice-blue);
-	font-size: 1.075em;
-	opacity: .7;
+	opacity: 0.5;
 }
 
 button {
 	background-color: var(--trans-ice-blue);
 	color: var(--white);
 	font-family: "Open Sans", sans-serif;
-	font-size: calc(1.1 * var(--small-text));
+	font-size: calc(1.175 * var(--small-text));
 	font-weight: 550;
 	word-spacing: 1px;
 	text-shadow: 0.5px 0.5px 1px var(--dark-ice-blue);
 	border: 1px solid #58828f;
 	border-radius: 7px;
 	box-shadow: 3px 3px 1px #173a45;
-	padding: 0.5em 1em 0.65em 1em;
+	height: 46px;
+	padding-inline: 1em;
 }
 
 @media (hover: hover) {
@@ -238,13 +242,12 @@ button:active {
 	transition: opacity .25s 0s ease-out;
 	> #copy-btn {
 		display: none;
-		flex: 1 1 auto;
 		align-self: flex-end;
 		margin-right: 0.2em;
 		margin-bottom: 0.2em;
 	}
 	&.fade-in {
-		opacity: .85;
+		opacity: 0.9;
 		transition: opacity .3s 0s ease-in;
 	}
 }
@@ -259,12 +262,13 @@ button:active {
 
 #lyrics-el {
 	color: var(--dark-ice-blue);
-	font-weight: 525;
+	font-weight: 540;
 	line-height: 1.55;
 	letter-spacing: normal;
-	backdrop-filter: blur(6px);
+	backdrop-filter: blur(9px);
+	min-height: 80px;
 	padding-inline: .8em;
-}
+	padding-bottom: 2rem;}
 
 /* ================================================= */
 /* ================= MEDIA QUERIES ================= */
@@ -286,7 +290,7 @@ button:active {
 		}
 
 		h1 {
-			font-size: clamp(1.9rem, 0.3rem + 8.3vw, 2.6rem);
+			font-size: clamp(1rem, 0.3rem + 8.3vw, 2.6rem);
 			letter-spacing: 0.04em;
 		}
 
@@ -302,7 +306,7 @@ button:active {
 
 		button {
 			width: 100%;
-			margin-top: 1em;
+			margin-top: var(--top-margin);
 			margin-left: unset;
 		}
 	}
@@ -319,5 +323,24 @@ button:active {
 
 	#lyrics-el {
 		font-size: 1.025rem;
+	}
+}
+
+@media(height < 600px) {
+	html, body {
+		height: unset !important;
+	}
+
+	.color-band {
+		margin-block: .5em 0;
+		padding-block: .5em;
+
+		> h1 {
+			font-size: 2.2rem !important;
+		}
+
+		> .subheading {
+			font-size: 1.2rem;
+		}
 	}
 }

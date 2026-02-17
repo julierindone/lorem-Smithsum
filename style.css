@@ -1,3 +1,6 @@
+/* TODO: flip media queries to mobile-first */
+/* TODO: Clean up this entire file */
+
 :root {
 	--white: #fbfbfb;
 	--trans-white: #fbfbfb75;
@@ -25,8 +28,9 @@ body {
 	color: var(--white);
 }
 
-body, h1, p, .subheading, main, footer {
+body, h1, p, a, .subheading, main, footer {
 	margin: 0 auto;
+	text-wrap: balance;
 }
 
 main, footer {
@@ -59,8 +63,6 @@ main, footer {
 	background-color: var(--trans-ice-blue);
 	display: flex;
 	flex-direction: column;
-	/* TODO: Fix the units on margin & padding blocks. */
-	margin-block: clamp(0.9rem, 0.5em + 2vw, 2em) 0;
 	padding-block: clamp(0.9rem, 0.5em + 2.4vw, 2em);
 	padding-inline: var(--inline-padding-margins);
 	backdrop-filter: blur(2px);
@@ -75,7 +77,6 @@ main, footer {
 		font-weight: 750;
 		word-spacing: 0.08em;
 		line-height: 1.22;
-		text-wrap: balance;
 		-webkit-text-stroke-width: .5px;
 		-webkit-text-stroke-color: var(--white);
 		max-width: 1000px;
@@ -90,7 +91,8 @@ main, footer {
 	}
 }
 
-#error-message, .word-count-input-container, button {
+#error-message, .word-count-input-container,
+button {
 	font-size: var(--small-text);
 }
 
@@ -111,7 +113,7 @@ footer {
 		margin: 0.6em auto 0 auto;
 	}
 
-	p {
+	p, a:link, a:visited {
 		font-size: calc(.86 * var(--small-text));
 		color: var(--white);
 		font-weight: 350;
@@ -135,25 +137,33 @@ footer {
 		margin-top: 0.4em;
 		width: 82%;
 	}
+
+	a:link,
+	a:visited {
+		display: block;
+		color: var(--ice-blue);
+		text-decoration-line: none;
+		margin-top: .5em;
+	}
 }
 
 .word-count-input-container {
 	display: flex;
 	flex-wrap: wrap;
-  align-items: center;
+	align-items: center;
 	margin-top: var(--top-margin);
 }
 
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
+	-webkit-appearance: none;
 	margin: 0;
 }
 
 /* Firefox */
 input[type=number] {
-  -moz-appearance: textfield;
+	-moz-appearance: textfield;
 }
 
 #word-count-input {
@@ -240,12 +250,14 @@ button:active {
 	overflow-y: auto;
 	opacity: 0;
 	transition: opacity .25s 0s ease-out;
+
 	> #copy-btn {
 		display: none;
 		align-self: flex-end;
 		margin-right: 0.2em;
 		margin-bottom: 0.2em;
 	}
+
 	&.fade-in {
 		opacity: 0.9;
 		transition: opacity .3s 0s ease-in;
@@ -268,12 +280,12 @@ button:active {
 	backdrop-filter: blur(9px);
 	min-height: 80px;
 	padding-inline: .8em;
-	padding-bottom: 2rem;}
+	padding-bottom: 2rem;
+}
 
 /* ================================================= */
 /* ================= MEDIA QUERIES ================= */
 /* ================================================= */
-
 
 @media (max-width: 500px) {
 	html {
@@ -312,11 +324,14 @@ button:active {
 	}
 
 	#lyrics-box {
-		scrollbar-width: none;  /* Firefox */
-		-ms-overflow-style: none;  /* IE and Edge */
+		scrollbar-width: none;
+		/* Firefox */
+		-ms-overflow-style: none;
+		/* IE and Edge */
 	}
 
-	#lyrics-box::-webkit-scrollbar {  /* Chrome */
+	#lyrics-box::-webkit-scrollbar {
+		/* Chrome */
 		width: 0;
 		background: transparent;
 	}
@@ -327,6 +342,7 @@ button:active {
 }
 
 @media(height < 600px) {
+
 	html, body {
 		height: unset !important;
 	}

@@ -2,13 +2,21 @@ import { load } from 'cheerio';
 import fetch from 'node-fetch';
 
 export async function handler () {
+	console.log("Function started")
+
 	try {
 		const songListUrl = 'https://songmeanings.com/artist/view/songs/464/'
 
 		// make the request to the external website from the Netlify function
 		const response = await fetch(songListUrl);
+		console.log("Status:", response.status);
+		console.log("Headers:", JSON.stringify([...response.headers]))
+
 		const rawHtml = await response.text();
+		console.log("HTML length:", rawHtml.length);
+		console.log("First 500 chars:", rawHtml.substring(0, 500))
 		const songList = []
+		console.log('songList', songList)
 
 		const $ = load(rawHtml)
 
